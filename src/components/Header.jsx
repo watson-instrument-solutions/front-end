@@ -1,14 +1,18 @@
-import React from 'react';
-import { Container, Navbar } from 'react-bootstrap';
-import '../styles.css'
+import React from 'react'
+import '../Styles/header.css'
+import wislogo from '../docs/wis-black-on-grey.jpg';
+import wislogoNarrow from '../docs/wis-narrow.jpg'
 
 function Header() {
   return (
-    <Navbar className='wisGrey'>
-        <Container>
-        Header
-        </Container>
-    </Navbar>
+    <div>
+        <div className='header_logo'>
+            <img src={wislogoNarrow} alt='wislogo' className='grey_logo' />
+        </div>
+        <p className='tagline'>
+            Acoustic Monitoring Equipment - management, hire, and servicing Australia wide
+        </p>
+    </div>
   )
 }
 

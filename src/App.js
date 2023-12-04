@@ -10,18 +10,20 @@ import Confirm from './pages/Confirm';
 import Equipment from './pages/Equipment';
 import AdminPortal from './pages/AdminPortal';
 import EditBooking from './pages/EditBooking';
+import Navbar from './components/Navbar';
 import Header from './components/Header';
 
 function App() {
   return (
     <>
     <Header />
+    <Navbar />
     <Container className='mb-4'>
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/login' element={<Login />}/>
         <Route path='/register' element={<Register />}/>
-        <Route path='/contact' element={<Contact />}/>
+        <Route path='/contact-us' element={<Contact />}/>
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/confirm' element={<Confirm />}/>
         <Route path='/equipment' element={<Equipment />}/>
