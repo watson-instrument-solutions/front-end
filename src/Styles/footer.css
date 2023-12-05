@@ -1,0 +1,27 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 55px;
+    width: 100%;
+    background-color: #d4e8ff;
+    display: flex;
+    justify-content: space-between; /* Align items at each end of the container */
+    align-items: center; /* Center items vertically within the container */
+}
+
+.address {
+    display: flex;
+    justify-content: flex-start;
+    width: 50%;
+    margin-bottom: 0px;
+    padding-left: 10%;
+}
+
+.abn {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+    margin-bottom: 0px;
+    padding-right: 10%;
+}
+

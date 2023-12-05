@@ -1,7 +1,7 @@
 .header_logo {
     height: 100px;
     width: auto;
-    
+    padding: 8px;
     display: flex;
     align-items: flex-start;
     background-color: #b7b9b8;
@@ -19,5 +19,8 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0px;
-    padding-right: 6px;
+    padding: 8px;
+    font-style: italic;
+    font-weight: 300;
+    font-size: larger; 
 }

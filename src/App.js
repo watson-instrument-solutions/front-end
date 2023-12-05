@@ -12,6 +12,8 @@ import AdminPortal from './pages/AdminPortal';
 import EditBooking from './pages/EditBooking';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
+import Footer from './components/Footer';
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
         <Route path='/edit-booking' element={<EditBooking />}/>
       </Routes>
     </Container>
+    <Footer />
     </>
   )
     
