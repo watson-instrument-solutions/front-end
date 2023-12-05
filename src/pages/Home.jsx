@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import '../Styles/home.css';
+import anechoicImg from '../docs/anechoic_unsplash.jpg';
 
 function Home() {
   return (
@@ -13,7 +15,7 @@ function Home() {
         complete your job with confidence and meeting industry specification.</p>
       </div>
       <div className='home_img_container'>
-        <img src='' alt='home_img' className='home_img'/>
+        <img src={anechoicImg} alt='home_img' className='home_img'/>
       </div>
     </div>
   )

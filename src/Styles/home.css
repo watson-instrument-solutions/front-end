@@ -1,3 +1,29 @@
 .home {
-    
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.home_text {
+    padding: 10px;
+    border: 2px solid;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    margin-bottom: 16px;
+    width: 400px;
+    height: 500px;
+    justify-content: flex-start;
+}
+
+.home_img_container {
+    border: 2px solid;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    justify-content: flex-end;
+}
+
+.home_img {
+    width: 500px;
+    object-fit: contain;
 }

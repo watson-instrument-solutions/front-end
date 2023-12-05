@@ -1,3 +1,8 @@
+.header {
+    
+    width: 100%;
+}
+
 .header_logo {
     height: 100px;
     width: auto;
@@ -5,6 +10,7 @@
     display: flex;
     align-items: flex-start;
     background-color: #b7b9b8;
+    
     
 }
 
