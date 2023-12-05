@@ -5,8 +5,8 @@
     width: 100%;
     background-color: #d4e8ff;
     display: flex;
-    justify-content: space-between; /* Align items at each end of the container */
-    align-items: center; /* Center items vertically within the container */
+    justify-content: space-between; 
+    align-items: center;
 }
 
 .address {

@@ -4,7 +4,7 @@ import wislogoNarrow from '../docs/wis-narrow.jpg'
 
 function Header() {
   return (
-    <div>
+    <div className='header'>
         <div className='header_logo'>
             <img src={wislogoNarrow} alt='wislogo' className='grey_logo' />
         </div>
