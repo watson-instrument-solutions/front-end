@@ -1,6 +1,5 @@
 import React from 'react'
 import '../Styles/header.css'
-import wislogo from '../docs/wis-black-on-grey.jpg';
 import wislogoNarrow from '../docs/wis-narrow.jpg'
 
 function Header() {
