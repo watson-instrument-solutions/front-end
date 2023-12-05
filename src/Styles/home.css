@@ -1,29 +1,15 @@
-.home {
-    padding: 10px;
-    display: flex;
-    justify-content: space-around;
-
+.all_cards {
+    height: 100vh;
+    padding: 20px;
 }
 
-.home_text {
-    padding: 10px;
-    border: 2px solid;
-    border-radius: 10px;
-    background-color: whitesmoke;
-    margin-bottom: 16px;
-    width: 400px;
-    height: 500px;
-    justify-content: flex-start;
+.text {
+    padding: 50px;
+    font-size: larger;
+    font-weight: 300; 
 }
 
-.home_img_container {
-    border: 2px solid;
-    border-radius: 10px;
-    background-color: whitesmoke;
-    justify-content: flex-end;
-}
-
-.home_img {
-    width: 500px;
+.image {
+    width: auto;
     object-fit: contain;
 }
