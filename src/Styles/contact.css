@@ -1,0 +1,41 @@
+.top_text {
+    margin: 40px;
+    font-size: larger;
+    font-weight: 300;
+}
+
+.contact_content {
+    object-fit: contain;
+    display: flex;
+}
+
+.contact_title {
+    padding: 30px;
+    font-weight: 400;
+}
+
+.name {
+    padding-left: 40px;
+    padding-bottom: 30px;
+    font-weight: 300;
+}
+
+.tel {
+    padding-left: 40px;
+    padding-bottom: 30px;
+    font-weight: 300;
+}
+
+.email {
+    padding-left: 40px;
+    padding-bottom: 30px;
+    font-weight: 300;
+}
+
+.fb {
+    padding-left: 40px;
+    padding-bottom: 30px;
+    color: #a6bcd6;
+    
+    
+}
