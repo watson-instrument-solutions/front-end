@@ -1,0 +1,17 @@
+.equipment_title {
+    font-weight: 400;
+    margin: 60px;
+}
+
+.dates_title {
+    font-size: larger;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+}
+
+.booking_dates {
+    display: flex;
+    justify-content: flex-end;
+}
