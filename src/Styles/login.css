@@ -1,0 +1,24 @@
+.login_container {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.login_text {
+    font-weight: 400;
+    margin: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    margin-bottom: 40px;
+    width: 140px;
+}
+
+.register_text {
+    font-size: large;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+}
