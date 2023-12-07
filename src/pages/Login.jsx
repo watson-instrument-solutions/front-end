@@ -13,11 +13,6 @@ function Login() {
             <FormControl style={{ margin: 'auto', width: '60%', marginBottom: '40px' }} 
             placeholder='email'
             type='input'
-            onKeyPress={event => {
-              if (event.key === 'Enter') {
-                
-              }
-            }}
             // onChange={event => setSearchInput(event.target.value)}
             />
             <FormControl style={{ margin: '0 auto', width: '60%', marginBottom: '40px' }} 

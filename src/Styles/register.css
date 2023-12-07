@@ -1,0 +1,12 @@
+.register_container {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.reg_text {
+    font-weight: 400;
+    margin: 60px;
+    display: flex;
+    justify-content: center;
+}
