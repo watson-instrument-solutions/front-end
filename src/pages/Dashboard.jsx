@@ -5,9 +5,9 @@ import '../Styles/dashboard.css';
 
 function Dashboard() {
   return (
-    <>
-    <h1 className='dashboard_text'>Dashboard</h1>
     <div className='dashboard_page'>
+    <h1 className='dashboard_text'>Dashboard</h1>
+    <div className='dashboard_page mx-2 row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2'>
       <Container className='user_details'>
         <Card className='text mb-3 border-0'>
           <div className='mb-4 d-flex justify-content-center'>
@@ -69,7 +69,7 @@ function Dashboard() {
       </Col>
     </Container>
   </div> 
-  </>
+  </div>
   )
 }
 
