@@ -1,0 +1,7 @@
+.admin_text {
+    display: flex;
+    justify-content: center;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
