@@ -57,7 +57,7 @@ function AdminPortal() {
             />
             </InputGroup>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete User</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
             </div>
         </Card>
     </Container>
@@ -98,13 +98,13 @@ function AdminPortal() {
             
             </Card.Body>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
             </div>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
             </div>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete Booking</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
             </div>
         </Card>
       </Col>
@@ -169,16 +169,16 @@ function AdminPortal() {
           />
           </InputGroup>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
         </div>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Add New</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Add New</Button>
         </div>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
         </div>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
         </div>
       </Card>
     </Container>
