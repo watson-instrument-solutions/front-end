@@ -18,7 +18,7 @@ function Equipment() {
                     <Card.Title>equipment</Card.Title>
                     <Card.Text>description</Card.Text>
                   </Card.Body>
-                  <Button>Add to Cart</Button>
+                  <Button className='add_cart border-0' style={{ backgroundColor: '#a6bcd6', color: 'white' }}>Add to Cart</Button>
                 </Card>
               </Col>
           </Row>

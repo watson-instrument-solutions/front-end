@@ -1,0 +1,11 @@
+.dashboard_text {
+    display: flex;
+    justify-content: center;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+.dashboard_page {
+    display: flex;
+    flex-direction: row;
+}
