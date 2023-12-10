@@ -38,7 +38,7 @@ function Header() {
                 <Nav.Link to='/contact-us' as={NavLink}>
                     Contact
                 </Nav.Link>
-                { user && (<div className='d-flex justify-content-center'>
+                { user && (<div className='logout_button'>
                     <Button className='border-0'
                     style={{ backgroundColor: '#a6bcd6', color: 'white' }} 
                     onClick={handleClick}>Log out</Button>

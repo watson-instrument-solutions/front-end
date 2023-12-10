@@ -4,3 +4,12 @@
     
 }
 
+.logout_button {
+    margin-right: 6px;
+    align-self: flex-end;
+    display: flex;
+    align-items: flex-end;
+    width: auto;
+    justify-self: end;
+}
+
