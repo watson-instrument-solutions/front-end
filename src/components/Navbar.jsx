@@ -22,7 +22,7 @@ function Header() {
                 <Nav.Link to='/equipment' as={NavLink}>
                     Hire Equipment
                 </Nav.Link>
-                {!user && ( <div>
+                {!user && ( <div className='d-flex'>
                 <Nav.Link to='/login' as={NavLink}>
                     Login
                 </Nav.Link>
