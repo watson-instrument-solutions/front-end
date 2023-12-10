@@ -1,6 +1,6 @@
 import { Button, Card, Container, FormControl, InputGroup } from 'react-bootstrap'
 import '../Styles/login.css'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { login } from '../functions/login';
 
@@ -9,6 +9,9 @@ function Login() {
   const [jwt, setJwt] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // useNavigate hook from react-router for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(`JWT value is:\n${jwt}`);
@@ -25,7 +28,7 @@ function Login() {
         <InputGroup className='mb-3 flex-column' size='lg'>
             <FormControl style={{ margin: 'auto', width: '60%', marginBottom: '40px' }} 
             placeholder='email'
-            type='input'
+            type='email'
             id='emailInput'
             value={email}
             onChange={event => setEmail(event.target.value)}
