@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useUserContext } from "./useUserContext";
+import { useNavigate } from 'react-router-dom';
 
 
 export const useLogin = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useUserContext();
+
+    const navigate = useNavigate();
   
     const login = async (email, password) => {
       setIsLoading(true);
@@ -31,15 +34,18 @@ export const useLogin = () => {
   
         if (!result.ok) {
           setIsLoading(false);
-          setError(data.error || "Unknown error");
+          setError(data.message);
         } else {
           // save user to local storage
           localStorage.setItem('user', JSON.stringify(data));
   
           // update the user context
           dispatch({ type: 'LOGIN', payload: data });
-  
+          
           setIsLoading(false);
+
+          console.log('Login successful, navigating to /dashboard');
+          navigate('/dashboard');
         }
       } catch (error) {
         console.error("Error during login:", error);
