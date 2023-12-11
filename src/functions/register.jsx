@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useUserContext } from "./useUserContext";
+import { useNavigate } from "react-router-dom";
 
 
 export const useRegister = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
-    const { dispatch } = useUserContext();
+    const navigate = useNavigate()
   
     const register = async (email, password) => {
       setIsLoading(true);
@@ -35,11 +35,11 @@ export const useRegister = () => {
         } else {
           // save user to local storage
           localStorage.setItem('user', JSON.stringify(data));
-  
-          // update the user context
-          dispatch({ type: 'LOGIN', payload: data });
-  
+          
           setIsLoading(false);
+
+          // navigate to login page
+          navigate('/login');
         }
       } catch (error) {
         console.error("Error during registration:", error);

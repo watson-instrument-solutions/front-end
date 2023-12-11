@@ -7,11 +7,19 @@ import { useState } from 'react';
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const {register, error, isLoading} = useRegister();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if password and confirm password match
+    if (password !== confirmPassword) {
+      // Handle password mismatch, you can show an error message or perform other actions
+      console.log("Password and confirm password do not match");
+      alert("Password and confirm password do not match");
+      return;
+    }
     await register(email, password);
   };
 
@@ -32,11 +40,19 @@ function Register() {
               />
               <FormControl
                 style={{ margin: '0 auto', width: '60%', marginBottom: '40px' }}
-                placeholder='password'
+                placeholder='password (must be at least 8 characters)'
                 type='password'
                 id='passwordInput'
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+              />
+              <FormControl
+                style={{ margin: '0 auto', width: '60%', marginBottom: '40px' }}
+                placeholder='confirm password'
+                type='password'
+                id='confirmPasswordInput'
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
               <div className='d-flex justify-content-center'>
                 <Button
