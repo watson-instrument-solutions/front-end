@@ -42,9 +42,9 @@ export const useLogin = () => {
           setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error during registration:", error);
+        console.error("Error during login:", error);
         setIsLoading(false);
-        setError("An unexpected error occurred during registration");
+        setError("An unexpected error occurred during login");
       }
     };
   

@@ -1,9 +1,28 @@
 import React from 'react'
 import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-bootstrap';
 import '../Styles/dashboard.css';
+import { useState, useEffect } from 'react';
+import { useUserContext } from '../functions/useUserContext';
 
 
 function Dashboard() {
+
+  // const { user } = useUserContext(
+  // const userDetails = async (user) => {
+    
+  //   console.log(user);
+  // try {
+  //   let result = await fetch(
+  //     process.env.REACT_APP_API_URL + "/me",
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ user._id }),
+  //     }
+  //   );
+
   return (
     <div className='dashboard_page'>
     <h1 className='dashboard_text'>Dashboard</h1>

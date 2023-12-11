@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import '../Styles/navbar.css'
 import { NavLink } from 'react-router-dom';
 import { useLogout } from '../functions/logout';

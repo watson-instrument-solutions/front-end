@@ -2,17 +2,27 @@ import { Button, Card, Container, FormControl, InputGroup } from 'react-bootstra
 import '../Styles/login.css'
 import { useState } from 'react';
 import { useLogin } from '../functions/login';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {login, error, isLoading} = useLogin();
+  const {login, isLoading} = useLogin();
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting form...');
     
-    await login(email, password);
+    try {
+      await login(email, password);
+      console.log('Login successful, navigating to /dashboard');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (
@@ -47,7 +57,7 @@ function Login() {
                 >
                   Log in
                 </Button>
-                {error && <div className='error'>{error}</div>}
+                {/* {error && <div className='error'>{error}</div>} */}
               </div>
             </InputGroup>
           </form>
