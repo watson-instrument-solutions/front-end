@@ -10,3 +10,39 @@
     display: flex;
     justify-content: center;
 }
+
+.loading_div {
+    
+    height: 55px;
+    margin: 0px;
+    margin-right: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.loading_text {
+    font-weight: 300;
+    font-size: x-large;
+    color: black;
+}
+
+.error_div {
+    display: flex;
+    justify-content: center;
+}
+
+.error {
+    font-weight: 400;
+    font-size: larger;
+    border: solid;
+    border-radius: 8px;
+    margin: 0px;
+    height: 55px;
+    width: 40%;
+    margin-right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(208, 43, 43);
+    background-color: rgb(241, 209, 214);
+}

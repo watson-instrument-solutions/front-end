@@ -47,6 +47,11 @@ function Register() {
                 >
                   Register
                 </Button>
+                </div>
+                <div className='loading_div'>
+                {isLoading && <p className='loading_text'>Loading...</p>}
+                </div>
+                <div className='error_div'>
                 {error && <div className='error'>{error}</div>}
               </div>
             </InputGroup>

@@ -31,7 +31,7 @@ export const useRegister = () => {
   
         if (!result.ok) {
           setIsLoading(false);
-          setError(data.error || "Unknown error");
+          setError(data.message);
         } else {
           // save user to local storage
           localStorage.setItem('user', JSON.stringify(data));
