@@ -1,15 +1,15 @@
 .wisGrey {
     background-color: #d4e8ff;
     height: 55px;
+    display: flex;
     
 }
 
-.logout_button {
-    margin-right: 6px;
-    align-self: flex-end;
+/* .logout_div {
+    margin-left: auto;
     display: flex;
     align-items: flex-end;
-    width: auto;
-    justify-self: end;
-}
+  } */
+
+
 
