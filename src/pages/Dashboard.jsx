@@ -2,12 +2,13 @@ import React from 'react'
 import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-bootstrap';
 import '../Styles/dashboard.css';
 import { useState, useEffect } from 'react';
-import { useUserContext } from '../functions/useUserContext';
+// import { useUserContext } from '../functions/useUserContext';
 
 
 function Dashboard() {
 
-  const { userContext } = useUserContext();
+  // const { userContext } = useUserContext();
+  const [saveStatus, setSaveStatus] = useState(null);
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -16,6 +17,8 @@ function Dashboard() {
     email: '',
     address: '',
   });
+
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,6 +53,48 @@ function Dashboard() {
     fetchUserData();
   }, []);
 
+  // Handler to toggle edit mode for all fields
+  const toggleEditMode = () => {
+    setIsEditMode((prevEditMode) => !prevEditMode);
+    setSaveStatus(null);
+  };
+
+  // Handler to save changes
+  const saveChanges = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/users/update-me", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
+      const data = await response.json();
+      setUserData(data);
+      console.log(data);
+
+      // Toggle back to read-only mode after saving changes
+      setIsEditMode(false);
+      setSaveStatus('success');
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  
+  };
+
 
   return (
     <div className='dashboard_page'>
@@ -65,38 +110,53 @@ function Dashboard() {
             placeholder='first name'
             type='input'
             value={userData.firstName}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='last name'
             type='input'
             value={userData.lastName}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='business name'
             type='input'
             value={userData.businessName}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, businessName: e.target.value })}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='telephone'
             type='input'
             value={userData.telephone}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, telephone: e.target.value })}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='email'
             type='input'
             value={userData.email}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='address'
             type='input'
             value={userData.address}
+            readOnly={!isEditMode}
+            onChange={(e) => setUserData({ ...userData, address: e.target.value })}
             />
             </InputGroup>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
-            </div>
-            <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
+            <Button
+            className='mb-3 border-0'
+            style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={isEditMode ? saveChanges : toggleEditMode}
+            >
+            {saveStatus === 'success' ? 'Edit' : 'Save'}
+            </Button>
             </div>
         </Card>
     </Container>
