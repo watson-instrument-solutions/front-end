@@ -7,21 +7,49 @@ import { useUserContext } from '../functions/useUserContext';
 
 function Dashboard() {
 
-  // const { user } = useUserContext(
-  // const userDetails = async (user) => {
-    
-  //   console.log(user);
-  // try {
-  //   let result = await fetch(
-  //     process.env.REACT_APP_API_URL + "/me",
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ user._id }),
-  //     }
-  //   );
+  const { userContext } = useUserContext();
+  const [userData, setUserData] = useState({
+    firstName: '',
+    lastName: '',
+    businessName: '',
+    telephone: '',
+    email: '',
+    address: '',
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+
+        const response = await fetch(process.env.REACT_APP_API_URL + "/users/me", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUserData(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
 
   return (
     <div className='dashboard_page'>
@@ -36,39 +64,39 @@ function Dashboard() {
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='first name'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.firstName}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='last name'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.lastName}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='business name'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.businessName}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='telephone'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.telephone}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='email'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.email}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='address'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={userData.address}
             />
             </InputGroup>
             <div className='d-flex justify-content-center'>
             <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
             </div>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Save Details</Button>
+            <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
             </div>
         </Card>
     </Container>
