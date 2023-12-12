@@ -9,7 +9,6 @@ import Dashboard from './pages/Dashboard';
 import Confirm from './pages/Confirm';
 import Equipment from './pages/Equipment';
 import AdminPortal from './pages/AdminPortal';
-import EditBooking from './pages/EditBooking';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -30,7 +29,6 @@ function App() {
         <Route path='/confirm' element={<Confirm />}/>
         <Route path='/equipment' element={<Equipment />}/>
         <Route path='/admin-portal' element={<AdminPortal />}/>
-        <Route path='/edit-booking' element={<EditBooking />}/>
       </Routes>
     </Container>
     <Footer />
