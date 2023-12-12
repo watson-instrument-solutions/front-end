@@ -29,7 +29,6 @@ function Dashboard() {
 
   const navigate = useNavigate();
   
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -180,6 +179,48 @@ function Dashboard() {
       } catch (error) {
         console.error('Error deleting user data:', error);
       }
+    }
+
+    // Handler to delete a single booking
+    const deleteBooking = async (bookingId) => {
+
+      // Prompt the user for confirmation
+      const isConfirmed = window.confirm('Are you sure you want to delete this booking?');
+  
+      if (!isConfirmed) {
+      // User canceled the deletion
+      return;
+    }
+        try {
+          const storedUser = JSON.parse(localStorage.getItem('user'));
+    
+          if (!storedUser || !storedUser.jwt) {
+            console.error('User or token is missing in localStorage');
+            return;
+          }
+    
+          const response = await fetch(process.env.REACT_APP_API_URL + `/booking/delete/${bookingId}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${storedUser.jwt}`,
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to fetch booking');
+          }
+    
+          const data = await response.json();
+          setUserBookings(data);
+          
+          console.log(data.message);
+          
+          alert('Booking Deleted Successfully!');
+          
+        } catch (error) {
+          console.error('Error deleting user booking:', error);
+        }
   
   };
 
@@ -253,7 +294,7 @@ function Dashboard() {
 
     <Container>
       <h1 className='bookings_text'>Current Bookings</h1>
-      {userBookings.map((booking) => (
+      {Array.isArray(userBookings) && userBookings.map((booking) => (
         <Col key={booking._id} className='mb-4'>
         <Card className='text mb-3 border-0'>
             <Card.Body>
@@ -268,10 +309,12 @@ function Dashboard() {
               Cost: ${booking.totalPrice}
               </Card.Text>
             </Card.Body>
-            <Button className='mb-3 border-0' 
-            style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>
+              <Button className='mb-3 border-0' 
+              style={{ width: '30%', backgroundColor: 'rgb(241, 209, 214)', color: 'rgb(208, 43, 43)' }}
+              onClick={() => deleteBooking(booking._id)}
+              >
               Delete
-            </Button>
+              </Button>
         </Card>
       </Col>
       ))}
@@ -281,7 +324,7 @@ function Dashboard() {
   <div className='d-flex justify-content-center'>
     <Button
       className='border-4'
-      style={{ marginBottom: '30px', borderColor: 'rgb(208, 43, 43)', color: 'rgb(208, 43, 43)', width: '30%', backgroundColor: 'rgb(241, 209, 214)',}}
+      style={{ fontWeight: 'bold', marginBottom: '30px', borderColor: 'rgb(208, 43, 43)', color: 'rgb(208, 43, 43)', width: '30%', backgroundColor: 'rgb(241, 209, 214)',}}
       onClick={deleteAccount}
       >
       Delete Account
