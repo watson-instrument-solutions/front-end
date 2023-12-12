@@ -9,3 +9,11 @@
     margin-bottom: 40px;
 }
 
+.bookings_text {
+    display: flex;
+    justify-content: center;
+    font-weight: 300;
+    margin-bottom: 40px;
+    padding-top: 50px;
+}
+

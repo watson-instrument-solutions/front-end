@@ -3,6 +3,7 @@ import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-boo
 import '../Styles/dashboard.css';
 import { useState, useEffect } from 'react';
 // import { useUserContext } from '../functions/useUserContext';
+import { format } from 'date-fns';
 
 
 function Dashboard() {
@@ -18,6 +19,11 @@ function Dashboard() {
     email: '',
     address: '',
   });
+
+  const formatDate = (dateString) => {
+    const dateObject = new Date(dateString);
+    return format(dateObject, 'dd/MM/yyyy');
+  };
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -195,14 +201,21 @@ function Dashboard() {
     </Container>
 
     <Container>
+      <h1 className='bookings_text'>Current Bookings</h1>
       {userBookings.map((booking) => (
         <Col key={booking._id} className='mb-4'>
         <Card className='text mb-3 border-0'>
-          <Card.Title className='display-6'>Current Bookings</Card.Title>
             <Card.Body>
-              <Card.Title>{booking._id}</Card.Title>
-              <Card.Text>{[booking.startDate, booking.endDate]}</Card.Text>
-              <Card.Text>{booking.totalPrice}</Card.Text>
+              <Card.Title className='mb-3'>Booking ID: {booking._id}</Card.Title>
+              <Card.Text>
+              Start Date: {formatDate(booking.startDate)}
+              </Card.Text>
+              <Card.Text>
+              End Date: {formatDate(booking.endDate)}
+              </Card.Text>
+              <Card.Text>
+              Cost: ${booking.totalPrice}
+              </Card.Text>
             </Card.Body>
             <Button className='mb-3 border-0' 
             style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>
