@@ -4,11 +4,13 @@ import '../Styles/dashboard.css';
 import { useState, useEffect } from 'react';
 // import { useUserContext } from '../functions/useUserContext';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 
 function Dashboard() {
 
   // const { userContext } = useUserContext();
+  const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [userBookings, setUserBookings] = useState([]);
   const [userData, setUserData] = useState({
@@ -25,7 +27,8 @@ function Dashboard() {
     return format(dateObject, 'dd/MM/yyyy');
   };
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -131,6 +134,39 @@ function Dashboard() {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
+  };
+
+    // Handler to Delete bookings
+    const deleteAccount = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+  
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+  
+        const response = await fetch(process.env.REACT_APP_API_URL + "/users/delete-me", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+  
+        const data = await response.json();
+        setUserData(data);
+        console.log(data.message);
+        navigate('/');
+        alert('Account Deleted Successfully!');
+        
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
   
   };
 
@@ -197,6 +233,8 @@ function Dashboard() {
             {saveStatus === 'success' ? 'Edit' : 'Save'}
             </Button>
             </div>
+            
+            
         </Card>
     </Container>
 
@@ -225,7 +263,17 @@ function Dashboard() {
       </Col>
       ))}
     </Container>
+    
   </div> 
+  <div className='d-flex justify-content-center'>
+    <Button
+      className='border-4'
+      style={{ marginBottom: '30px', borderColor: 'rgb(208, 43, 43)', color: 'rgb(208, 43, 43)', width: '30%', backgroundColor: 'rgb(241, 209, 214)',}}
+      onClick={deleteAccount}
+      >
+      Delete Account
+    </Button>
+  </div>
   </div>
   )
 }
