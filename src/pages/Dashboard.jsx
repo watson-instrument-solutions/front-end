@@ -139,6 +139,14 @@ function Dashboard() {
 
     // Handler to Delete bookings
     const deleteAccount = async () => {
+
+    // Prompt the user for confirmation
+    const isConfirmed = window.confirm('Are you sure you want to delete your account?');
+
+    if (!isConfirmed) {
+    // User canceled the deletion
+    return;
+  }
       try {
         const storedUser = JSON.parse(localStorage.getItem('user'));
   
