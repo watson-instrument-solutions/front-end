@@ -2,14 +2,14 @@ import React from 'react'
 import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-bootstrap';
 import '../Styles/dashboard.css';
 import { useState, useEffect } from 'react';
-// import { useUserContext } from '../functions/useUserContext';
+import { useUserContext } from '../functions/useUserContext';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 
 function Dashboard() {
 
-  // const { userContext } = useUserContext();
+  const { dispatch } = useUserContext();
   const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [userBookings, setUserBookings] = useState([]);
@@ -127,6 +127,7 @@ function Dashboard() {
       const data = await response.json();
       setUserData(data);
       console.log(data);
+      
 
       // Toggle back to read-only mode after saving changes
       setIsEditMode(false);
@@ -160,12 +161,16 @@ function Dashboard() {
   
         const data = await response.json();
         setUserData(data);
+        
+        dispatch({ type: 'LOGOUT' });
         console.log(data.message);
+        
         navigate('/');
         alert('Account Deleted Successfully!');
+        localStorage.removeItem('user');
         
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error deleting user data:', error);
       }
   
   };
