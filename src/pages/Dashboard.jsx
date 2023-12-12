@@ -9,6 +9,7 @@ function Dashboard() {
 
   // const { userContext } = useUserContext();
   const [saveStatus, setSaveStatus] = useState(null);
+  const [userBookings, setUserBookings] = useState([]);
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -51,6 +52,38 @@ function Dashboard() {
     };
 
     fetchUserData();
+    setSaveStatus('success');
+
+    const fetchUserBookings = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+
+        const response = await fetch(process.env.REACT_APP_API_URL + "/booking/my-bookings", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUserBookings(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserBookings();
   }, []);
 
   // Handler to toggle edit mode for all fields
@@ -160,13 +193,16 @@ function Dashboard() {
             </div>
         </Card>
     </Container>
+
     <Container>
-      <Col className='mb-4'>
+      {userBookings.map((booking) => (
+        <Col key={booking._id} className='mb-4'>
         <Card className='text mb-3 border-0'>
           <Card.Title className='display-6'>Current Bookings</Card.Title>
             <Card.Body>
-              <Card.Title>booking</Card.Title>
-              <Card.Text>booking_dates</Card.Text>
+              <Card.Title>{booking._id}</Card.Title>
+              <Card.Text>{[booking.startDate, booking.endDate]}</Card.Text>
+              <Card.Text>{booking.totalPrice}</Card.Text>
             </Card.Body>
             <Button className='mb-3 border-0' 
             style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>
@@ -174,6 +210,7 @@ function Dashboard() {
             </Button>
         </Card>
       </Col>
+      ))}
     </Container>
   </div> 
   </div>
