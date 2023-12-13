@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, FormControl, InputGroup} from 'react-bootstrap';
 import '../Styles/equipment.css';
+import { useUserContext } from '../functions/useUserContext';
 
 
 function Equipment() {
 
-  const [equipmentData, setEquipmentData] = useState([])
+  const { user } = useUserContext();
+  const [equipmentData, setEquipmentData] = useState([]);
+  const [availabilityChecked, setAvailabilityChecked] = useState(false)
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -31,7 +34,12 @@ function Equipment() {
     fetchEquipment();
   }, []);
     
-  
+  const checkAvailability = () => {
+    const isAvailable = equipmentData.some(equipment => equipment.stock >= 1);
+    setAvailabilityChecked(true);
+    // Set state or perform other actions based on availability if needed
+  };
+
   return (
     <div className='equipment_page'>
       <Container className='equipment_container'
@@ -48,11 +56,13 @@ function Equipment() {
                   <Card.Body>
                     <Card.Title>{equipment.itemName}</Card.Title>
                     <Card.Text>{equipment.description}</Card.Text>
+                    {availabilityChecked && equipment.stock >= 1 && (<Card.Text>Available</Card.Text>)}
                   </Card.Body>
-                  <Button className='add_cart border-0' 
-                  style={{ margin: '10px',width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+                  {user && (<Button className='check_avail border-0' 
+                  style={{width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
                   >
                   Add to Cart</Button>
+                  )}
                 </Card>
               </Col>
               ))}
@@ -62,7 +72,7 @@ function Equipment() {
   
       <Container className='booking_dates'>
         <div className='dates_container'>
-          <p className='dates_title'>Enter your booking dates to check availability</p>
+          <p className='dates_title'>Enter dates to check availability</p>
           <InputGroup className='mb-3 mr-3 flex-column' size='lg'>
             <FormControl
               style={{ width: '50%', marginBottom: '10px' }}
@@ -73,15 +83,11 @@ function Equipment() {
               style={{ width: '50%', marginBottom: '10px' }}
               placeholder='end date (dd/mm/yyyy)'
               type='input'
-              onKeyPress={event => {
-                if (event.key === 'Enter') {
-                  // Handle Enter key press
-                }
-              }}
             />
           </InputGroup>
           <Button className='add_cart border-0' 
                   style={{ margin: '10px', width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+                  onClick={checkAvailability}
                   >
                   Check Availability</Button>
         </div>
