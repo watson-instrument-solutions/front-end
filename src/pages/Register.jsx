@@ -3,6 +3,7 @@ import { Card, Container, FormControl, InputGroup, Button } from 'react-bootstra
 import '../Styles/register.css';
 import { useRegister } from '../functions/register';
 import { useState } from 'react';
+// import { Alert } from '@mui/material';
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,9 @@ function Register() {
     if (password !== confirmPassword) {
       // Handle password mismatch, you can show an error message or perform other actions
       console.log("Password and confirm password do not match");
+      // <Alert variant="filled" severity="warning">
+      // Password and confirm password do not match
+      // </Alert>
       alert("Password and confirm password do not match");
       return;
     }

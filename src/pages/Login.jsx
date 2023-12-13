@@ -2,6 +2,7 @@ import { Button, Card, Container, FormControl, InputGroup } from 'react-bootstra
 import '../Styles/login.css'
 import { useState } from 'react';
 import { useLogin } from '../functions/login';
+import { NavLink } from 'react-router-dom';
 
 
 function Login() {
@@ -61,6 +62,8 @@ function Login() {
               <div className='loading_div'>
                 {isLoading && <p className='loading_text'>Loading...</p>}
                 </div>
+                <p className='register_text'>
+                Or &nbsp;<NavLink to='/register'>Register</NavLink>&nbsp; a new Account</p>
                 <div className='error_div'>
                 {error && <div className='error'>{error}</div>}
               </div>

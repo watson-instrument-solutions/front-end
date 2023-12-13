@@ -12,14 +12,24 @@
 }
 
 .button {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     width: 140px;
 }
 
 .loading_text {
+    display: flex;
+    justify-content: center;
     font-weight: 300;
     font-size: x-large;
     color: black;
+}
+
+.register_text {
+    font-size: large;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
 }
 
 .error_div {
