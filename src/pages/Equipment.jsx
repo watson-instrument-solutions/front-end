@@ -63,19 +63,33 @@ function Equipment() {
                 <Card className='equipment_items border-0 shadow'
                 style={{width: '100%', height: 'auto'}}>
                   <Card.Img src={equipment.images} alt={equipment.itemName}
-                  style={{width: '70%', height: 'auto'}} />
+                  style={{width: '100%', height: 'auto'}} />
                   <Card.Body>
                     <Card.Title>{equipment.itemName}</Card.Title>
                       <Card.Text>{equipment.description}</Card.Text>
+
+                      {equipment.itemName !== 'Microphone Mast' && (
+                      <>
                       <Card.Title>Rates:</Card.Title>
                       <Card.Text className='mb-2'>/day ${equipment.pricePerDay}</Card.Text>
                       <Card.Text className='mb-2'>/week ${equipment.pricePerWeek}</Card.Text>
                       <Card.Text className='mb-2'>/month ${equipment.pricePerMonth}</Card.Text>
-                      {availabilityChecked && equipment.stock >= 1 && 
+                      </>)}
+
+                      {equipment.itemName == 'Microphone Mast' && (
+                        <>
+                        <Card.Title>Rates:</Card.Title>
+                        <Card.Text className='mb-2'>/order ${equipment.supplyCost}
+                        </Card.Text>
+                        </>
+                      )}
+                      
+                      {availabilityChecked && (equipment.stock >= 1 || equipment.supplyCost >1) && 
                       (<Card.Text className='d-flex justify-content-end'
                       style={{fontSize: 'large', fontWeight: '300'}}>Available&nbsp;
                       <CheckCircleOutlineIcon style={{fill: "#3db983"}}/>
                       </Card.Text>)}
+                      
                   </Card.Body>
                   <div className='d-flex justify-content-end'>
                   {user && (<Button className='check_avail border-0' 
