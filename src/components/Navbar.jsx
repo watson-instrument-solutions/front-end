@@ -13,7 +13,7 @@ function Header() {
         logout()
     }
   return (
-    <Navbar className='wisGrey mb-4'>
+    <Navbar className='wisGrey mb-4 shadow'>
       <Container fluid>
         <Nav>
           <Nav.Link to='/' as={NavLink}>

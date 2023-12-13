@@ -1,9 +1,12 @@
 .equipment_page {
     margin-bottom: 55px;
+    padding: 0;
+    width: 100%;
+    display: flex;
 }
 
 .equipment_title {
-    font-weight: 400;
+    font-weight: 300;
     margin: 60px;
 }
 
@@ -11,11 +14,25 @@
     font-size: larger;
     font-weight: 300;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 40px;
 }
 
 .booking_dates {
     display: flex;
-    justify-content: flex-end;
+    margin-top: 50%;
+    
+        
+      
+}
+
+.dates_container {
+    position: fixed;
+    width: 50%;
+    top: 50%; /* Adjust to position vertically */
+    left: 90%;
+    right: 10%;
+    transform: translate(-50%, -50%);
+    /* max-width: 50%; */
+    /* width: 100%;    */
 }
