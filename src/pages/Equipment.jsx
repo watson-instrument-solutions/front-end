@@ -12,6 +12,11 @@ function Equipment() {
   const [equipmentData, setEquipmentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [availabilityChecked, setAvailabilityChecked] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  })
+
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -44,6 +49,7 @@ function Equipment() {
   const checkAvailability = () => {
     const isAvailable = equipmentData.some(equipment => equipment.stock >= 1);
     setAvailabilityChecked(true);
+    const bookedDates = equipmentData.bookedDates
     // Set state or perform other actions based on availability if needed
   };
 
@@ -111,12 +117,12 @@ function Equipment() {
             <FormControl
               style={{ width: '50%', marginBottom: '10px' }}
               placeholder='start date (dd/mm/yyyy)'
-              type='input'
+              type='date'
             />
             <FormControl
               style={{ width: '50%', marginBottom: '10px' }}
               placeholder='end date (dd/mm/yyyy)'
-              type='input'
+              type='date'
             />
           </InputGroup>
           <Button className='add_cart border-0' 
