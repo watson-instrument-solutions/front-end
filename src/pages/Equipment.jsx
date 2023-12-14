@@ -4,6 +4,7 @@ import '../Styles/equipment.css';
 import { useUserContext } from '../functions/useUserContext';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { CircularProgress } from '@mui/material';
+import { useDateRange } from '../context/DateRangeContext';
 
 
 function Equipment() {
@@ -12,10 +13,7 @@ function Equipment() {
   const [equipmentData, setEquipmentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [availabilityChecked, setAvailabilityChecked] = useState(false)
-  const [dateRange, setDateRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  })
+  const {dateRange, setNewDateRange} = useDateRange();
 
 
   useEffect(() => {
@@ -45,12 +43,33 @@ function Equipment() {
     fetchEquipment();
     
   }, []);
+
+  const handleStartDateChange = (event) => {
+    setNewDateRange({ ...dateRange, startDate: event.target.value});
+  };
+
+  const handleEndDateChange = (event) => {
+    setNewDateRange({ ...dateRange, endDate: event.target.value});
+  };
     
   const checkAvailability = () => {
-    const isAvailable = equipmentData.some(equipment => equipment.stock >= 1);
+    // Convert date strings to Date objects
+    const startDate = new Date(dateRange.startDate);
+    const endDate = new Date(dateRange.endDate);
+
+    const availableEquipment = equipmentData.filter((equipment) => {
+      const isAvailable = equipment.stock >= 1 && 
+      !equipment.bookedDates.some((date) => {
+        const bookedDate = new Date(date);
+        return bookedDate > startDate && bookedDate < endDate;
+      });
+      return isAvailable;
+    })
+
     setAvailabilityChecked(true);
-    const bookedDates = equipmentData.bookedDates
-    // Set state or perform other actions based on availability if needed
+
+    console.log('Available Equipment:', availableEquipment);
+    
   };
 
   return (
@@ -82,7 +101,7 @@ function Equipment() {
                       <Card.Text className='mb-2'>/month ${equipment.pricePerMonth}</Card.Text>
                       </>)}
 
-                      {equipment.itemName == 'Microphone Mast' && (
+                      {equipment.itemName === 'Microphone Mast' && (
                         <>
                         <Card.Title>Rates:</Card.Title>
                         <Card.Text className='mb-2'>/order ${equipment.supplyCost}
@@ -90,11 +109,12 @@ function Equipment() {
                         </>
                       )}
                       
-                      {availabilityChecked && (equipment.stock >= 1 || equipment.supplyCost >1) && 
-                      (<Card.Text className='d-flex justify-content-end'
-                      style={{fontSize: 'large', fontWeight: '300'}}>Available&nbsp;
-                      <CheckCircleOutlineIcon style={{fill: "#3db983"}}/>
-                      </Card.Text>)}
+                      {availableEquipment.includes(equipment) && (
+                      <Card.Text className='d-flex justify-content-end' style={{ fontSize: 'large', fontWeight: '300' }}>
+                        Available&nbsp;
+                        <CheckCircleOutlineIcon style={{ fill: '#3db983' }} />
+                      </Card.Text>
+                    )}
                       
                   </Card.Body>
                   <div className='d-flex justify-content-end'>
@@ -118,11 +138,13 @@ function Equipment() {
               style={{ width: '50%', marginBottom: '10px' }}
               placeholder='start date (dd/mm/yyyy)'
               type='date'
+              onChange={handleStartDateChange}
             />
             <FormControl
               style={{ width: '50%', marginBottom: '10px' }}
               placeholder='end date (dd/mm/yyyy)'
               type='date'
+              onChange={handleEndDateChange}
             />
           </InputGroup>
           <Button className='add_cart border-0' 

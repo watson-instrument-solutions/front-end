@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import '../Styles/navbar.css'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useLogout } from '../functions/logout';
 import { useUserContext } from '../functions/useUserContext';
+import { ShoppingCartCheckoutOutlined } from '@mui/icons-material';
 
 function Header() {
     const { logout } = useLogout()
@@ -12,6 +13,8 @@ function Header() {
     const handleClick = () => {
         logout()
     }
+
+    const navigate = useNavigate()
   return (
     <Navbar className='wisGrey mb-4 shadow'>
       <Container fluid>
@@ -42,12 +45,29 @@ function Header() {
           {user && (
             <div className='logout_div'>
               <Button
+              className='border-3 rounded-circle'
+              style={{ marginRight: '1em', width: '3em', height: '3em', backgroundColor: 'white', color: '#3db983', borderColor: '#3db983' }}
+              onClick={() => navigate('/confirm')}
+              ><ShoppingCartCheckoutOutlined/>
+              <div className='rounded-circle bg-danger d-flex justify-content-center
+              align-items-center'
+              style={{color: 'white', width: '1.2em', height: '1.2em',
+              position: 'absolute'
+              }}
+              >
+              3
+              </div>
+              
+              </Button>
+              <Button
                 className='border-3'
                 style={{ backgroundColor: 'white', color: '#a6bcd6', borderColor: '#a6bcd6' }}
                 onClick={handleClick}
               >
                 Log out
               </Button>
+              
+              
             </div>
           )}
         </div>
