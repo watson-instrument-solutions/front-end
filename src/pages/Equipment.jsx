@@ -5,6 +5,7 @@ import { useUserContext } from '../functions/useUserContext';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { CircularProgress } from '@mui/material';
 import { useDateRange } from '../context/DateRangeContext';
+import { HighlightOffOutlined } from '@mui/icons-material';
 
 
 function Equipment() {
@@ -14,6 +15,7 @@ function Equipment() {
   const [loading, setLoading] = useState(true);
   const [availabilityChecked, setAvailabilityChecked] = useState(false)
   const {dateRange, setNewDateRange} = useDateRange();
+  const [availableEquipment, setAvailableEquipment] = useState([]);
 
 
   useEffect(() => {
@@ -46,10 +48,12 @@ function Equipment() {
 
   const handleStartDateChange = (event) => {
     setNewDateRange({ ...dateRange, startDate: event.target.value});
+    setAvailableEquipment([]);
   };
 
   const handleEndDateChange = (event) => {
     setNewDateRange({ ...dateRange, endDate: event.target.value});
+    setAvailableEquipment([]);
   };
     
   const checkAvailability = () => {
@@ -58,7 +62,7 @@ function Equipment() {
     const endDate = new Date(dateRange.endDate);
 
     const availableEquipment = equipmentData.filter((equipment) => {
-      const isAvailable = equipment.stock >= 1 && 
+      const isAvailable = (equipment.stock >= 1 || equipment.supplyCost > 1) && 
       !equipment.bookedDates.some((date) => {
         const bookedDate = new Date(date);
         return bookedDate > startDate && bookedDate < endDate;
@@ -66,6 +70,7 @@ function Equipment() {
       return isAvailable;
     })
 
+    setAvailableEquipment(availableEquipment);
     setAvailabilityChecked(true);
 
     console.log('Available Equipment:', availableEquipment);
@@ -113,6 +118,12 @@ function Equipment() {
                       <Card.Text className='d-flex justify-content-end' style={{ fontSize: 'large', fontWeight: '300' }}>
                         Available&nbsp;
                         <CheckCircleOutlineIcon style={{ fill: '#3db983' }} />
+                      </Card.Text>
+                    )}
+                      {availabilityChecked && !availableEquipment.includes(equipment) && (
+                      <Card.Text className='d-flex justify-content-end' style={{ fontSize: 'large', fontWeight: '300' }}>
+                        Unavailable&nbsp;
+                        <HighlightOffOutlined style={{ fill: 'rgb(208, 43, 43' }} />
                       </Card.Text>
                     )}
                       
