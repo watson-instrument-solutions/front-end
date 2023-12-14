@@ -12,13 +12,15 @@ import { DateRangeProvider } from './context/DateRangeContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <DateRangeProvider>
+    
       <UserContextProvider>
+      <DateRangeProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
+        </DateRangeProvider>
       </UserContextProvider>
-    </DateRangeProvider>
+    
   </React.StrictMode>
 );
 

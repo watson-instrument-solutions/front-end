@@ -16,6 +16,7 @@ function Equipment() {
   const [availabilityChecked, setAvailabilityChecked] = useState(false)
   const {dateRange, setNewDateRange} = useDateRange();
   const [availableEquipment, setAvailableEquipment] = useState([]);
+  const [availabilityCheckedTriggered, setAvailabilityCheckedTriggered] = useState(false);
 
 
   useEffect(() => {
@@ -54,24 +55,78 @@ function Equipment() {
   const handleEndDateChange = (event) => {
     setNewDateRange({ ...dateRange, endDate: event.target.value});
     setAvailableEquipment([]);
+    setAvailabilityChecked(true);
   };
     
   const checkAvailability = () => {
+    if (!availabilityChecked) {
+      console.log('No dates selected');
+      alert('Please select dates to check availability')
+      return
+    }
     // Convert date strings to Date objects
     const startDate = new Date(dateRange.startDate);
     const endDate = new Date(dateRange.endDate);
 
+    if (startDate > endDate) {
+      console.log('End date must be after start date')
+      alert('Start date must be before End date')
+      return
+    }
+
+    console.log('Initial Equipment Data:', equipmentData);
+
+    // const availableEquipment = equipmentData.filter((equipment) => {
+    //   console.log('Equipment ID:', equipment._id);
+    //   console.log('Equipment Data:', equipment);
+      
+    //   const isAvailable =
+    //     (equipment.stock > 0 || equipment.supplyCost > 1) &&
+    //     !equipment.bookedDates.some((booking) => {
+    //       const bookedStartDate = new Date(booking.startDate);
+    //       const bookedEndDate = new Date(booking.endDate);
+
+    //       console.log('Selected start date', startDate)
+    //       console.log('Selected end date', endDate)
+    //       console.log('Booked Start Date:', bookedStartDate);
+    //       console.log('Booked End Date:', bookedEndDate);
+        
+    //       return endDate < bookedStartDate || startDate > bookedEndDate;
+    //     });
+    //     console.log('Is Available:', isAvailable);  
+    //   return isAvailable;
+      
+    // })
+
     const availableEquipment = equipmentData.filter((equipment) => {
-      const isAvailable = (equipment.stock >= 1 || equipment.supplyCost > 1) && 
-      !equipment.bookedDates.some((date) => {
-        const bookedDate = new Date(date);
-        return bookedDate > startDate && bookedDate < endDate;
+      console.log('Processing Equipment ID:', equipment._id);
+    
+      if (!(equipment.stock > 0 || equipment.supplyCost > 1)) {
+        console.log('Not meeting availability criteria. Skipping...');
+        return false;
+      }
+    
+      if (!equipment.bookedDates || !Array.isArray(equipment.bookedDates)) {
+        console.log('Invalid or missing bookedDates. Skipping...');
+        return false;
+      }
+    
+      const isAvailable = !equipment.bookedDates.some((booking) => {
+        // Log booking details here if needed
+        return endDate < new Date(booking.startDate) || startDate > new Date(booking.endDate);
       });
+    
+      console.log('Is Available:', isAvailable);
       return isAvailable;
-    })
+    });
+    
+    console.log('Final Available Equipment:', availableEquipment);
 
     setAvailableEquipment(availableEquipment);
-    setAvailabilityChecked(true);
+    setAvailabilityCheckedTriggered(true);
+
+    console.log('Available Equipment:', availableEquipment);
+    console.log('Availability Checked Triggered:', true);
 
     console.log('Available Equipment:', availableEquipment);
     
@@ -120,7 +175,7 @@ function Equipment() {
                         <CheckCircleOutlineIcon style={{ fill: '#3db983' }} />
                       </Card.Text>
                     )}
-                      {availabilityChecked && !availableEquipment.includes(equipment) && (
+                      {availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment) && (
                       <Card.Text className='d-flex justify-content-end' style={{ fontSize: 'large', fontWeight: '300' }}>
                         Unavailable&nbsp;
                         <HighlightOffOutlined style={{ fill: 'rgb(208, 43, 43' }} />
@@ -143,7 +198,7 @@ function Equipment() {
   
       <Container className='booking_dates'>
         <div className='dates_container'>
-          <p className='dates_title'>Enter dates to check availability</p>
+          <p className='dates_title'>Select dates to check availability</p>
           <InputGroup className='mb-3 mr-3 flex-column' size='lg'>
             <FormControl
               style={{ width: '50%', marginBottom: '10px' }}
@@ -158,11 +213,13 @@ function Equipment() {
               onChange={handleEndDateChange}
             />
           </InputGroup>
-          <Button className='add_cart border-0' 
-                  style={{ margin: '10px', width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
-                  onClick={checkAvailability}
-                  >
-                  Check Availability</Button>
+          <Button 
+          className='add_cart border-0' 
+          style={{ margin: '10px', width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+          onClick={checkAvailability}
+          >
+          Check Availability
+          </Button>
         </div>
       </Container>
     </div>
