@@ -1,10 +1,11 @@
 import React from 'react'
 import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-bootstrap';
 import '../Styles/dashboard.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import { useUserContext } from '../functions/useUserContext';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+
 
 
 function Dashboard() {
@@ -23,11 +24,12 @@ function Dashboard() {
   });
 
   const formatDate = (dateString) => {
-    const dateObject = new Date(dateString);
-    return format(dateObject, 'dd/MM/yyyy');
+  const dateObject = new Date(dateString);
+  return format(dateObject, 'dd/MM/yyyy');
   };
 
   const navigate = useNavigate();
+  
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -85,6 +87,7 @@ function Dashboard() {
 
         const data = await response.json();
         setUserBookings(data);
+        
         console.log(data);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -210,11 +213,28 @@ function Dashboard() {
           if (!response.ok) {
             throw new Error('Failed to fetch booking');
           }
-    
-          const data = await response.json();
-          setUserBookings(data);
+
+          // Fetch the updated list of bookings after deletion
+          const bookingsResponse = await fetch(
+          process.env.REACT_APP_API_URL + "/booking/my-bookings",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${storedUser.jwt}`,
+            },
+          }
+        );
+
+          if (!bookingsResponse.ok) {
+            throw new Error('Failed to fetch user bookings');
+          }
+
+          const updatedBookings = await bookingsResponse.json();
+          setUserBookings(updatedBookings);
           
-          console.log(data.message);
+            
+          console.log('Booking deleted successfully:', updatedBookings);
           
           alert('Booking Deleted Successfully!');
           
@@ -223,6 +243,11 @@ function Dashboard() {
         }
   
   };
+
+  useEffect(() => {
+    console.log('userBookings:', userBookings);
+    // ... rest of the code
+  }, [userBookings]);
 
 
   return (
