@@ -23,8 +23,9 @@ function Header() {
 
     const navigate = useNavigate()
   return (
-    <div className='navbar'>
-    <Navbar className='wisGrey mb-4 shadow'>
+    
+    <Navbar className='wisGrey mb-4 shadow'
+    sticky='top'>
       <Container fluid>
         <Nav>
           <Nav.Link to='/' as={NavLink}>
@@ -56,15 +57,14 @@ function Header() {
           {user && (
             <div className='logout_div'>
               <Button
-              className='border-3 rounded-circle'
-              style={{ marginRight: '1em', width: '3em', height: '3em', backgroundColor: 'white', color: '#3db983', borderColor: '#3db983' }}
+              className='rounded-circle'
+              style={{ marginRight: '1.6em', width: '3em', height: '3em', backgroundColor: '#3db983', color: 'white' }}
               onClick={() => navigate('/confirm')}
               ><ShoppingCartCheckoutOutlined/>
-              <div className='rounded-circle bg-danger d-flex justify-content-center
+              <div className='rounded-circle d-flex justify-content-center
               align-items-center'
-              style={{color: 'white', width: '1.2em', height: '1.2em',
-              position: 'absolute'
-              }}
+              style={{backgroundColor: '#d62150', color: 'white', width: '1.2em', height: '1.2em',
+              position: 'absolute', bottom: 0, right: 118}}
               >
               <span>{totalItems}</span>
               </div>
@@ -84,7 +84,7 @@ function Header() {
         </div>
       </Container>
     </Navbar>
-    </div>
+    
   )
 }
 

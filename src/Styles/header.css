@@ -1,12 +1,12 @@
 .header {
-    
+    border-bottom: solid;
     width: 100%;
 }
 
 .header_logo {
     height: 100px;
     width: auto;
-    padding: 8px;
+    padding: 10px;
     display: flex;
     align-items: flex-start;
     background-color: #b7b9b8;
@@ -25,7 +25,7 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 0px;
-    padding: 8px;
+    padding: 10px;
     font-style: italic;
     font-weight: 300;
     font-size: larger; 

@@ -8,7 +8,7 @@ function Contact() {
     <>
     <div className='top_text'>For any servicing queries or anything related to your booking, 
     please contact us directly via the details below</div>
-    <Container className='contact_content'>
+    <Container className='contact_content shadow'>
       <Card className='contact_card border-0'>
         <h1 className='contact_title'>Contact Us</h1>
         <h2 className='name'>Kate O'Sullivan</h2>
