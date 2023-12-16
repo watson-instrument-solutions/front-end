@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import '../Styles/navbar.css'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useLogout } from '../functions/logout';
 import { useUserContext } from '../functions/useUserContext';
 import { ShoppingCartCheckoutOutlined } from '@mui/icons-material';
+import CartContext from '../context/CartContext';
 
 function Header() {
     const { logout } = useLogout()
     const { user } = useUserContext()
 
+    const { cartState } = useContext(CartContext);
+    console.log (`Current Cart State`, cartState);
+
+    // Calculate the total number of items in the cart
+    const totalItems = cartState.cartItems.reduce((total, item) => total + item.quantity, 0);
+    console.log('Total Items:', totalItems);
     const handleClick = () => {
         logout()
     }
@@ -55,7 +62,7 @@ function Header() {
               position: 'absolute'
               }}
               >
-              3
+              <span>{totalItems}</span>
               </div>
               
               </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, Card, Col, Container, FormControl, InputGroup} from 'react-bootstrap';
 import '../Styles/equipment.css';
 import { useUserContext } from '../functions/useUserContext';
@@ -6,6 +6,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { CircularProgress } from '@mui/material';
 import { useDateRange } from '../context/DateRangeContext';
 import { HighlightOffOutlined } from '@mui/icons-material';
+import CartContext from '../context/CartContext';
 
 
 function Equipment() {
@@ -17,7 +18,7 @@ function Equipment() {
   const {dateRange, setNewDateRange} = useDateRange();
   const [availableEquipment, setAvailableEquipment] = useState([]);
   const [availabilityCheckedTriggered, setAvailabilityCheckedTriggered] = useState(false);
-
+  const { addToCart, removeFromCart, clearCart, cartState } = useContext(CartContext)
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -122,7 +123,16 @@ function Equipment() {
     console.log('Availability Checked Triggered:', true);
   };
   
-    
+  const handleAddToCart = (equipment) => {
+    const itemId = equipment._id; 
+  console.log('Item ID:', itemId);
+  addToCart(itemId);
+  };
+  
+  const handleRemoveFromCart = (equipment) => {
+    removeFromCart(equipment._id);
+    console.log('Removed from cart:', equipment._id);
+  }; 
   
     
   
@@ -183,13 +193,16 @@ function Equipment() {
                   {user && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#3db983', color: 'white' }}
                   disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
+                  onClick={() => handleAddToCart(equipment)}
                   >
                   Add to Cart</Button>
                   )}
                   {user && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#d62150', color: 'white' }}
                   disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
-                  >Remove</Button>)}
+                  onClick={() => handleRemoveFromCart(equipment)}
+                  >
+                  Remove</Button>)}
                   </div>
                 </Card>
               </Col>
