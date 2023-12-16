@@ -7,14 +7,14 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { UserContextProvider } from './context/UserContext';
 import { DateRangeProvider } from './context/DateRangeContext';
-import { ShoppingCartProvider } from './context/CartContext';
+import { CartProvider} from './context/CartContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     
-    <ShoppingCartProvider>
+    <CartProvider>
       <UserContextProvider>
         <DateRangeProvider>
           <BrowserRouter>
@@ -22,7 +22,7 @@ root.render(
           </BrowserRouter>
         </DateRangeProvider>
       </UserContextProvider>
-    </ShoppingCartProvider>
+    </CartProvider>
 
   </React.StrictMode>
 );
