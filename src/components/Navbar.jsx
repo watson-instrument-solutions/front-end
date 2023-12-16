@@ -23,6 +23,7 @@ function Header() {
 
     const navigate = useNavigate()
   return (
+    <div className='navbar'>
     <Navbar className='wisGrey mb-4 shadow'>
       <Container fluid>
         <Nav>
@@ -31,6 +32,9 @@ function Header() {
           </Nav.Link>
           <Nav.Link to='/equipment' as={NavLink}>
             Hire Equipment
+          </Nav.Link>
+          <Nav.Link to='/contact-us' as={NavLink}>
+            Contact
           </Nav.Link>
           {!user && (
             <div className='d-flex'>
@@ -80,6 +84,7 @@ function Header() {
         </div>
       </Container>
     </Navbar>
+    </div>
   )
 }
 
