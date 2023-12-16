@@ -61,76 +61,72 @@ function Equipment() {
   const checkAvailability = () => {
     if (!availabilityChecked) {
       console.log('No dates selected');
-      alert('Please select dates to check availability')
-      return
+      alert('Please select dates to check availability');
+      return;
     }
+  
     // Convert date strings to Date objects
-    const startDate = new Date(dateRange.startDate);
-    const endDate = new Date(dateRange.endDate);
-
-    if (startDate > endDate) {
-      console.log('End date must be after start date')
-      alert('Start date must be before End date')
-      return
+    const selectedStartDate = new Date(dateRange.startDate);
+    const selectedEndDate = new Date(dateRange.endDate);
+  
+    if (selectedStartDate > selectedEndDate) {
+      console.log('End date must be after start date');
+      alert('Start date must be before End date');
+      return;
     }
-
+  
+    // Initial available array
     console.log('Initial Equipment Data:', equipmentData);
-
-    // const availableEquipment = equipmentData.filter((equipment) => {
-    //   console.log('Equipment ID:', equipment._id);
-    //   console.log('Equipment Data:', equipment);
-      
-    //   const isAvailable =
-    //     (equipment.stock > 0 || equipment.supplyCost > 1) &&
-    //     !equipment.bookedDates.some((booking) => {
-    //       const bookedStartDate = new Date(booking.startDate);
-    //       const bookedEndDate = new Date(booking.endDate);
-
-    //       console.log('Selected start date', startDate)
-    //       console.log('Selected end date', endDate)
-    //       console.log('Booked Start Date:', bookedStartDate);
-    //       console.log('Booked End Date:', bookedEndDate);
-        
-    //       return endDate < bookedStartDate || startDate > bookedEndDate;
-    //     });
-    //     console.log('Is Available:', isAvailable);  
-    //   return isAvailable;
-      
-    // })
-
+  
+    // Filter array
     const availableEquipment = equipmentData.filter((equipment) => {
-      console.log('Processing Equipment ID:', equipment._id);
-    
-      if (!(equipment.stock > 0 || equipment.supplyCost > 1)) {
-        console.log('Not meeting availability criteria. Skipping...');
+      console.log('Processing Equipment:', equipment.itemName);
+  
+      // Check if equipment has bookedDates array; if not, return true
+      // console.log('Equipment bookedDates:', equipment.bookedDates);
+      if (!Array.isArray(equipment.bookedDates) || equipment.bookedDates.length === 0) {
+        console.log('No bookings. Equipment available');
+        return true;
+      }
+  
+      // If they have bookedDates, check if there is any overlap with selected dates
+      else if (
+        equipment.bookedDates.some((booking) => {
+          const bookedStartDate = new Date(booking.startDate);
+          const bookedEndDate = new Date(booking.endDate);
+          return selectedEndDate < bookedStartDate || selectedStartDate > bookedEndDate;
+        })
+      ) {
+        console.log('Booking present but no date overlap. Equipment available');
+        return true;
+      }
+  
+      // Check if stock is greater than 0 or supplyCost is greater than 1
+      else if (equipment.stock > 0 || equipment.supplyCost > 1) {
+        console.log('Date overlap but suffcient stock, or made to order item. Equipment available.');
+        return true;
+      }
+  
+      // If none of the conditions are met, return false
+      else {
+        console.log('Equipment is not available for the selected dates');
         return false;
       }
-    
-      if (!equipment.bookedDates || !Array.isArray(equipment.bookedDates)) {
-        console.log('Invalid or missing bookedDates. Skipping...');
-        return false;
-      }
-    
-      const isAvailable = !equipment.bookedDates.some((booking) => {
-        // Log booking details here if needed
-        return endDate < new Date(booking.startDate) || startDate > new Date(booking.endDate);
-      });
-    
-      console.log('Is Available:', isAvailable);
-      return isAvailable;
     });
-    
+  
     console.log('Final Available Equipment:', availableEquipment);
-
     setAvailableEquipment(availableEquipment);
     setAvailabilityCheckedTriggered(true);
-
+  
     console.log('Available Equipment:', availableEquipment);
     console.log('Availability Checked Triggered:', true);
-
-    console.log('Available Equipment:', availableEquipment);
-    
   };
+  
+    
+  
+    
+  
+
 
   return (
     <div className='equipment_page'>
@@ -183,12 +179,14 @@ function Equipment() {
                     )}
                       
                   </Card.Body>
-                  <div className='d-flex justify-content-end'>
+                  <div className='d-flex align-items-end flex-column'>
                   {user && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#3db983', color: 'white' }}
                   >
                   Add to Cart</Button>
                   )}
+                  {user && (<Button className='check_avail border-0' 
+                  style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#d62150', color: 'white' }}>Remove</Button>)}
                   </div>
                 </Card>
               </Col>
