@@ -2,14 +2,14 @@
     background-color: #d4e8ff;
     height: 60px;
     display: flex;
+    padding: 0px;
     
 }
 
-/* .logout_div {
-    margin-left: auto;
-    display: flex;
-    align-items: flex-end;
-  } */
+.navbar {
+    width: 100%;
+    padding-top: 0px;
+}
 
 
 
