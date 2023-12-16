@@ -182,11 +182,14 @@ function Equipment() {
                   <div className='d-flex align-items-end flex-column'>
                   {user && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#3db983', color: 'white' }}
+                  disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
                   >
                   Add to Cart</Button>
                   )}
                   {user && (<Button className='check_avail border-0' 
-                  style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#d62150', color: 'white' }}>Remove</Button>)}
+                  style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#d62150', color: 'white' }}
+                  disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
+                  >Remove</Button>)}
                   </div>
                 </Card>
               </Col>
