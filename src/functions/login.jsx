@@ -7,8 +7,11 @@ export const useLogin = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useUserContext();
+    // const jwt = require('jsonwebtoken');
 
     const navigate = useNavigate();
+    
+    // require('dotenv').config();
   
     const login = async (email, password) => {
       setIsLoading(true);
@@ -38,14 +41,25 @@ export const useLogin = () => {
         } else {
           // save user to local storage
           localStorage.setItem('user', JSON.stringify(data));
+          
+          
   
           // update the user context
           dispatch({ type: 'LOGIN', payload: data });
+
+        
+
+          if (data.admin) {
+            console.log('admin login, navigating to admin portal')
+            navigate('/admin-portal')
+          } else {
+            console.log('user login, navigating to dashboard');
+            navigate('/dashboard');
+          }
           
           setIsLoading(false);
-
-          console.log('Login successful, navigating to /dashboard');
-          navigate('/dashboard');
+          
+          
         }
       } catch (error) {
         console.error("Error during login:", error);
