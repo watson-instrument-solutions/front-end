@@ -79,7 +79,7 @@ const cartReducer = (state, action) => {
       localStorage.removeItem('cart');
         return {
           ...state,
-          items: [],
+          cartItems: [],
         };
 
     default:
