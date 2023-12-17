@@ -3,9 +3,11 @@ import { Card, Container, Button, InputGroup, FormControl, Col } from 'react-boo
 import '../Styles/confirm.css';
 import CartContext from '../context/CartContext'
 import { useDateRange } from '../context/DateRangeContext'
+import { useNavigate } from 'react-router-dom';
 
 function Confirm() {
-
+  const { clearCart } = useContext(CartContext)
+  const navigate = useNavigate()
   const { dateRange } = useDateRange();
   const {startDate, endDate } = dateRange;
   const { cartState } = useContext(CartContext);
@@ -143,11 +145,19 @@ function Confirm() {
 
       const data = await response.json();
       console.log(data);
+      alert('Booking created successfully!');
+      navigate('/dashboard');
+      clearCart();
       
     } catch (error) {
       console.error('Error creating a booking', error);
     }
   }
+
+  // reformat dates to call in Card
+  const newBookingStartDate = new Date(dateRange.startDate);
+  const newBookingEndDate = new Date(dateRange.endDate);
+
 
   return (
     <div className='confirm_page'>
@@ -160,8 +170,8 @@ function Confirm() {
           </div>
           <Card.Body>
             <Card.Title>Details</Card.Title>
-              {/* <Card.Text className='mb-2'>Start Date: {startDate.toDateString()}</Card.Text>
-              <Card.Text>End Date: {endDate.toDateString()}</Card.Text> */}
+              <Card.Text className='mb-2'>Start Date: {newBookingStartDate.toDateString()}</Card.Text>
+              <Card.Text>End Date: {newBookingEndDate.toDateString()}</Card.Text>
                 {cartState.cartItems.map(item => 
                   <div key={item.id}>
                   <Card.Text className='mb-1'>{item.itemName} </Card.Text>

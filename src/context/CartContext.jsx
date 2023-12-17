@@ -74,13 +74,13 @@ const cartReducer = (state, action) => {
     localStorage.setItem('cart', JSON.stringify(newState));
     return newState;
 
-    // case 'CLEAR_CART':
-    //   // clear local storge
-    //   localStorage.removeItem('cart');
-    //     return {
-    //       ...state,
-    //       items: [],
-    //     };
+    case 'CLEAR_CART':
+      // clear local storge
+      localStorage.removeItem('cart');
+        return {
+          ...state,
+          items: [],
+        };
 
     default:
       return state;
@@ -100,9 +100,9 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: item });
   };
 
-  // const clearCart = () => {
-  //   dispatch({ type: 'CLEAR_CART' })
-  // };
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' })
+  };
 
   // In your CartProvider component or wherever you initialize your state
 const loadCartFromLocalStorage = () => {
@@ -118,7 +118,7 @@ const loadCartFromLocalStorage = () => {
         cartState,
         addToCart,
         removeFromCart,
-        // clearCart,
+        clearCart,
         loadCartFromLocalStorage
       }}
     >
