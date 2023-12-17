@@ -57,7 +57,7 @@ function Header() {
           {user && (
             <div className='logout_div'>
               <Button
-              className='rounded-circle'
+              className='border-0 rounded-circle'
               style={{ marginRight: '1.6em', width: '3em', height: '3em', backgroundColor: '#3db983', color: 'white' }}
               onClick={() => navigate('/confirm')}
               ><ShoppingCartCheckoutOutlined/>

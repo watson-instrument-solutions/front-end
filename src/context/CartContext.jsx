@@ -14,46 +14,52 @@ const initialCartState = {
 const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TO_CART':
-      const existingItem = state.cartItems.find(item => item.id === action.payload.id);
-      const newItem = { ...action.payload, quantity: 1 };
+  const existingItem = state.cartItems.find(item => item.id === action.payload.id);
+  const newItem = { ...action.payload, quantity: 1 };
 
-      console.log('Action Payload ID:', action.payload.id);
-      console.log('Existing Item:', existingItem);
-      console.log('Cart Items:', state.cartItems);
+  // Check if the item is already in the cart
+  if (existingItem) {
+    // Check if adding one more would exceed the available stock
+    if (existingItem.quantity + 1 <= action.payload.stock) {
+      // If not, update the quantity
+      const newState = {
+        ...state,
+        cartItems: state.cartItems.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        ),
+      };
 
-      // Check if the item is already in the cart
-      if (existingItem) {
-        // Check if adding one more would exceed the available stock
-        if (existingItem.quantity + 1 <= action.payload.stock) {
-          // If not, update the quantity
-          return {
-            ...state,
-            cartItems: state.cartItems.map(item =>
-              item.id === action.payload.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-            ),
-          };
-        } else {
-          alert('Maximum available stock reached!')
-          return state;
-        }
-      } else {
-        // Check if adding the new item would exceed the available stock
-        if (newItem.quantity <= action.payload.stock) {
-          // If not, add the item with a quantity of 1
-          return {
-            ...state,
-            cartItems: [...state.cartItems, newItem],
-          };
-        } else {
-          // If adding the new item would exceed the available stock, do nothing or handle as needed
-          return state;
+      // Save the updated state to local storage
+      localStorage.setItem('cart', JSON.stringify(newState));
+
+      return newState;
+    } else {
+      alert('Maximum available stock reached!');
+      return state;
     }
-  };
+  } else {
+    // Check if adding the new item would exceed the available stock
+    if (newItem.quantity <= action.payload.stock) {
+      // If not, add the item with a quantity of 1
+      const newState = {
+        ...state,
+        cartItems: [...state.cartItems, newItem],
+      };
+
+      // Save the updated state to local storage
+      localStorage.setItem('cart', JSON.stringify(newState));
+
+      return newState;
+    } else {
+      // If adding the new item would exceed the available stock, do nothing or handle as needed
+      return state;
+    }
+  }
 
   case 'REMOVE_FROM_CART':
-    return {
+    const newState = {
       ...state,
       cartItems: state.cartItems
         .map(item =>
@@ -64,11 +70,18 @@ const cartReducer = (state, action) => {
         .filter(item => item.quantity > 0), // Remove items with quantity 0
     };
 
+    // Save the updated state to local storage
+    localStorage.setItem('cart', JSON.stringify(newState));
+    return newState;
+
     case 'CLEAR_CART':
-      return {
-        ...state,
-        items: [],
-      };
+      // clear local storge
+      localStorage.removeItem('cart');
+        return {
+          ...state,
+          items: [],
+        };
+
     default:
       return state;
   }
@@ -91,13 +104,22 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_CART' })
   };
 
+  // In your CartProvider component or wherever you initialize your state
+const loadCartFromLocalStorage = () => {
+  const storedCart = localStorage.getItem('cart');
+  return storedCart ? JSON.parse(storedCart) : initialCartState;
+};
+
+
+
   return (
     <CartContext.Provider
       value={{
         cartState,
         addToCart,
         removeFromCart,
-        clearCart
+        clearCart,
+        loadCartFromLocalStorage
       }}
     >
       {children}
