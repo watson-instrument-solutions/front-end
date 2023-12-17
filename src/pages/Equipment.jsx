@@ -18,7 +18,7 @@ function Equipment() {
   const {dateRange, setNewDateRange} = useDateRange();
   const [availableEquipment, setAvailableEquipment] = useState([]);
   const [availabilityCheckedTriggered, setAvailabilityCheckedTriggered] = useState(false);
-  const { addToCart, removeFromCart, clearCart, cartState } = useContext(CartContext)
+  const { addToCart, removeFromCart } = useContext(CartContext)
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -124,15 +124,15 @@ function Equipment() {
   };
   
   const handleAddToCart = (equipment) => {
-    const { _id, stock } = equipment; // Destructure the equipment object
+    const { _id, stock, itemName } = equipment; // Destructure the equipment object
     console.log('Item ID:', _id);
-    addToCart({ id: _id, stock }); // Pass an object with id and stock properties to addToCart
+    addToCart({ id: _id, stock, itemName }); // Pass an object with id and stock properties to addToCart
   };
   
   const handleRemoveFromCart = (equipment) => {
-    const { _id, stock } = equipment; // Destructure the equipment object
+    const { _id, stock, itemName } = equipment; // Destructure the equipment object
     console.log('Item ID:', _id);
-    removeFromCart({ id: _id, stock }); // Pass an object with id and stock properties to removeFromCart
+    removeFromCart({ id: _id, stock, itemName }); // Pass an object with id and stock properties to removeFromCart
   }; 
   
     
@@ -235,6 +235,7 @@ function Equipment() {
           >
           Check Availability
           </Button>
+          <p className='checkout_text'>Checkout to view your booking details</p>
         </div>
       </Container>
     </div>
