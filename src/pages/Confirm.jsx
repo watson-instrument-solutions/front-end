@@ -4,8 +4,10 @@ import '../Styles/confirm.css';
 import CartContext from '../context/CartContext'
 import { useDateRange } from '../context/DateRangeContext'
 import { useNavigate } from 'react-router-dom';
+import calculateTotalPrice from '../functions/calculatePrice';
 
 function Confirm() {
+  const [totalPrice, setTotalPrice] = useState(null);
   const { clearCart } = useContext(CartContext)
   const navigate = useNavigate()
   const { dateRange } = useDateRange();
@@ -133,7 +135,8 @@ function Confirm() {
         body: JSON.stringify({
           equipmentIDs: cartEquipmentIDS,
           startDate: formattedStartDate,
-          endDate: formattedEndDate 
+          endDate: formattedEndDate,
+          totalPrice: totalPrice
         }),
       });
 
@@ -157,6 +160,30 @@ function Confirm() {
   // reformat dates to call in Card
   const newBookingStartDate = new Date(dateRange.startDate);
   const newBookingEndDate = new Date(dateRange.endDate);
+  // create and array of equipment Ids from cart states
+  const cartEquipmentIDS = cartState.cartItems.map(item => item);
+  console.log(cartEquipmentIDS);
+
+  // calculateTotalPrice(cartEquipmentIDS, startDate, endDate).then((totalPrice) => {
+  //   console.log('Total Price:', totalPrice);
+  // }).catch((error) => {
+  //   console.error('Error:', error.message);
+  // });
+
+  useEffect(() => {
+    const calculateAndSetTotalPrice = async () => {
+      try {
+        const result = await calculateTotalPrice(cartEquipmentIDS, startDate, endDate);
+        setTotalPrice(result);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    calculateAndSetTotalPrice(); // Initial calculation
+
+    // If you want to recalculate when startDate or endDate changes, add them to the dependency array
+  }, [cartEquipmentIDS, startDate, endDate]);
 
 
   return (
@@ -173,11 +200,12 @@ function Confirm() {
               <Card.Text className='mb-2'>Start Date: {newBookingStartDate.toDateString()}</Card.Text>
               <Card.Text>End Date: {newBookingEndDate.toDateString()}</Card.Text>
                 {cartState.cartItems.map(item => 
-                  <div key={item.id}>
-                  <Card.Text className='mb-1'>{item.itemName} </Card.Text>
-                  <Card.Text className='mb-4'>quantity: {item.quantity}</Card.Text>
-                  </div>
+                <div key={item.id}>
+                <Card.Text className='mb-1'>{item.itemName} </Card.Text>
+                <Card.Text className='mb-4'>quantity: {item.quantity}</Card.Text>
+                </div>
                 )}
+              <Card.Text>Total Price: ${totalPrice}</Card.Text>
           </Card.Body>
         </Card>
     </Container>

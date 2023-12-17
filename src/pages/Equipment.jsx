@@ -124,15 +124,19 @@ function Equipment() {
   };
   
   const handleAddToCart = (equipment) => {
-    const { _id, stock, itemName } = equipment; // Destructure the equipment object
+    const { _id, stock, itemName, pricePerDay, 
+    pricePerWeek, pricePerMonth, supplyCost } = equipment; // Destructure the equipment object
     console.log('Item ID:', _id);
-    addToCart({ id: _id, stock, itemName }); // Pass an object with id and stock properties to addToCart
+    addToCart({ id: _id, stock, itemName, pricePerDay, 
+      pricePerWeek, pricePerMonth, supplyCost  }); // Pass an object with id and stock properties to addToCart
   };
   
   const handleRemoveFromCart = (equipment) => {
-    const { _id, stock, itemName } = equipment; // Destructure the equipment object
+    const { _id, stock, itemName, pricePerDay, 
+      pricePerWeek, pricePerMonth, supplyCost } = equipment; // Destructure the equipment object
     console.log('Item ID:', _id);
-    removeFromCart({ id: _id, stock, itemName }); // Pass an object with id and stock properties to removeFromCart
+    removeFromCart({ id: _id, stock, itemName, pricePerDay, 
+      pricePerWeek, pricePerMonth, supplyCost }); // Pass an object with id and stock properties to removeFromCart
   }; 
   
     
