@@ -96,6 +96,59 @@ function Confirm() {
     }
   };
 
+  // Handler to create booking
+  const createBooking = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      // create and array of equipment Ids from cart states
+      const cartEquipmentIDS = cartState.cartItems.map(item => String(item.id));
+
+      // console.log(cartEquipmentIDS)
+      // console.log('Type of startDate:', typeof startDate);
+      // console.log(startDate);
+      // console.log('Type of endDate:', typeof endDate);
+      // console.log(endDate);
+      const newBookingStartDate = new Date(dateRange.startDate);
+      // console.log(newBookingStartDate);
+      const newBookingEndDate = new Date(dateRange.endDate);
+      const formattedStartDate = newBookingStartDate.toLocaleDateString();
+      // console.log(formattedStartDate);
+      const formattedEndDate = newBookingEndDate.toLocaleDateString();
+      
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/booking/me/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        body: JSON.stringify({
+          equipmentIDs: cartEquipmentIDS,
+          startDate: formattedStartDate,
+          endDate: formattedEndDate 
+        }),
+      });
+
+      // console.log(response)
+
+      if (!response.ok) {
+        throw new Error('Failed to create a booking');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      
+    } catch (error) {
+      console.error('Error creating a booking', error);
+    }
+  }
+
   return (
     <div className='confirm_page'>
     <h1 className='confirm_text'>Confirmation</h1>
@@ -107,8 +160,8 @@ function Confirm() {
           </div>
           <Card.Body>
             <Card.Title>Details</Card.Title>
-              <Card.Text className='mb-2'>Start Date: {startDate.toDateString()}</Card.Text>
-              <Card.Text>End Date: {endDate.toDateString()}</Card.Text>
+              {/* <Card.Text className='mb-2'>Start Date: {startDate.toDateString()}</Card.Text>
+              <Card.Text>End Date: {endDate.toDateString()}</Card.Text> */}
                 {cartState.cartItems.map(item => 
                   <div key={item.id}>
                   <Card.Text className='mb-1'>{item.itemName} </Card.Text>
@@ -186,7 +239,10 @@ function Confirm() {
       After confirmation we will send the details to your provided email address
     </div>
     <div className='d-flex justify-content-center'>
-      <Button className='mb-3 border-0' style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}>CONFIRM BOOKING</Button>
+      <Button className='mb-3 border-0' 
+      style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+      onClick={createBooking}
+      >CONFIRM BOOKING</Button>
     </div>
   </div>
   )
