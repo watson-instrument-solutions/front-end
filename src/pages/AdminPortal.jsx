@@ -4,7 +4,9 @@ import '../Styles/adminportal.css';
 
 function AdminPortal() {
   const [userData, setUserData] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [equipmentData, setEquipmentData] = useState([]);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,11 +39,43 @@ function AdminPortal() {
     };
 
     fetchUserData();
+
+    const fetchEquipmentData = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+
+        const response = await fetch(process.env.REACT_APP_API_URL + "/equipment/all", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch equipment list');
+        }
+
+        const data = await response.json();
+        setEquipmentData(data);
+        // console.log('Equipment', data);
+      } catch (error) {
+        console.error('Error fetching equipment list:', error);
+      }
+    };
+
+    fetchEquipmentData();
     
 
   }, []);
 
   console.log('Users', userData);
+  console.log('Equipment', equipmentData);
 
   const handleUserSelect = (userId) => {
     console.log('id', userId)
@@ -50,6 +84,12 @@ function AdminPortal() {
     console.log('Selected User:', selectedUser);
   };
   
+  const handleEquipmentSelect = (equipmentId) => {
+    console.log('id', equipmentId)
+    const selectedEquipment = equipmentData.find(equipment => equipment._id === equipmentId);
+    setSelectedEquipment(selectedEquipment);
+    console.log('Selected Equipment:', selectedEquipment);
+  };
 
   return (
     <div className='admin_page'>
@@ -58,7 +98,7 @@ function AdminPortal() {
       <Container className='users'>
         <Card className='text mb-3 border-0'>
           <div className='mb-4 d-flex justify-content-center'>
-          <Card.Title className='display-6'>User Details</Card.Title>
+          <Card.Title className='display-6'>Users</Card.Title>
           </div>
           <Dropdown className='mb-4'
           onSelect={(userId) => handleUserSelect(userId)}>
@@ -120,7 +160,7 @@ function AdminPortal() {
     <Container>
       <Col className='mb-4'>
         <Card className='text mb-3 border-0'>
-          <Card.Title className='display-6'>Bookings for Selected User</Card.Title>
+          <Card.Title className='display-6'>Bookings</Card.Title>
             <Card.Body>
               <Card.Title className='mb-4'>booking.id</Card.Title>
               <InputGroup className='flex-column' size='lg'>
@@ -170,58 +210,66 @@ function AdminPortal() {
         <div className='mb-4 d-flex justify-content-center'>
         <Card.Title className='display-6'>Equipment</Card.Title>
         </div>
-        <Dropdown className='mb-4'>
+        <Dropdown className='mb-4'
+        onSelect={(equipmentId) => handleEquipmentSelect(equipmentId)}>
           <Dropdown.Toggle variant="light" id="dropdown-basic">
             Select Equipment
           </Dropdown.Toggle>
-          <Dropdown.Menu>
-          {/* Add your dropdown menu items here */}
-          <Dropdown.Item href="#">Equipment 1</Dropdown.Item>
-          <Dropdown.Item href="#">Equipment 2</Dropdown.Item>
-          {/* ... */}
+          <Dropdown.Menu variant='dark'>
+          {equipmentData && equipmentData.length > 0 ? (
+                equipmentData.map(equipment => (
+                  <Dropdown.Item key={equipment.id}
+                  eventKey={equipment._id}
+                  >
+                  {`${equipment.itemName}`}
+                  </Dropdown.Item>
+                      ))
+                  ) : (
+                  <Dropdown.Item disabled>No equipment available</Dropdown.Item>
+              )}
           </Dropdown.Menu>
           </Dropdown>
           
         <InputGroup className='flex-column' size='lg'>
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='item name'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedEquipment.itemName}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='description'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedEquipment.description}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='images'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedEquipment.images}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per day'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={`$${selectedEquipment.pricePerDay}`}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per week'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={`$${selectedEquipment.pricePerWeek}`}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per month'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={`$${selectedEquipment.pricePerMonth}`}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='stock'
-            type='input'
+            value={`available: ${selectedEquipment.stock}`}
             // onChange={event => setSearchInput(event.target.value)}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='supply cost'
-            type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={`$${selectedEquipment.supplyCost}`}
+            readOnly
           />
           </InputGroup>
         <div className='d-flex justify-content-center'>
