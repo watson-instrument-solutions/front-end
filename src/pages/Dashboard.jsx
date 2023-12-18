@@ -138,7 +138,7 @@ function Dashboard() {
     }
   };
 
-    // Handler to Delete bookings
+    // Handler to Delete user account
     const deleteAccount = async () => {
 
     // Prompt the user for confirmation

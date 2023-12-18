@@ -7,8 +7,10 @@ function AdminPortal() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [equipmentData, setEquipmentData] = useState([]);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    
     const fetchUserData = async () => {
       try {
         const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -63,7 +65,7 @@ function AdminPortal() {
 
         const data = await response.json();
         setEquipmentData(data);
-        // console.log('Equipment', data);
+        console.log('Equipment', data);
       } catch (error) {
         console.error('Error fetching equipment list:', error);
       }
@@ -71,8 +73,50 @@ function AdminPortal() {
 
     fetchEquipmentData();
     
+}, []);
 
-  }, []);
+// handler to delete selected user
+//   Handler to Delete user account
+  const deleteUser = async () => {
+
+    // Prompt the user for confirmation
+    const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+
+    if (!isConfirmed) {
+    // User canceled the deletion
+    return;
+  }
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+  
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+  
+        const response = await fetch(process.env.REACT_APP_API_URL + "/users/delete/" + selectedUser._id, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+  
+        const data = await response.json();
+        
+        console.log(data.message);
+        // setUserData(userData)
+        
+        alert('User Deleted Successfully!');
+        
+        } catch (error) {
+        console.error('Error deleting user data:', error);
+    }
+  }
 
   console.log('Users', userData);
   console.log('Equipment', equipmentData);
@@ -153,7 +197,10 @@ function AdminPortal() {
             />
             </InputGroup>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={deleteUser}
+            >
+            Delete</Button>
             </div>
         </Card>
     </Container>
@@ -233,42 +280,42 @@ function AdminPortal() {
         <InputGroup className='flex-column' size='lg'>
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='item name'
-            value={selectedEquipment.itemName}
+            value={selectedEquipment ? selectedEquipment.itemName : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='description'
-            value={selectedEquipment.description}
+            value={selectedEquipment ? selectedEquipment.description : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='images'
-            value={selectedEquipment.images}
+            value={selectedEquipment ? selectedEquipment.images : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per day'
-            value={`$${selectedEquipment.pricePerDay}`}
+            value={selectedEquipment ? selectedEquipment.pricePerDay : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per week'
-            value={`$${selectedEquipment.pricePerWeek}`}
+            value={selectedEquipment ? selectedEquipment.pricePerWeek : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per month'
-            value={`$${selectedEquipment.pricePerMonth}`}
+            value={selectedEquipment ? selectedEquipment.pricePerMonth : ''}
             readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='stock'
-            value={`available: ${selectedEquipment.stock}`}
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedEquipment ? selectedEquipment.stock : ''}
+            readOnly
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='supply cost'
-            value={`$${selectedEquipment.supplyCost}`}
+            value={selectedEquipment ? selectedEquipment.supplyCost: ''}
             readOnly
           />
           </InputGroup>

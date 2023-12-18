@@ -180,9 +180,9 @@ function Confirm() {
       }
     };
 
-    calculateAndSetTotalPrice(); // Initial calculation
+    calculateAndSetTotalPrice(); 
 
-    // If you want to recalculate when startDate or endDate changes, add them to the dependency array
+    
   }, [cartEquipmentIDS, startDate, endDate]);
 
 
