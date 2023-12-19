@@ -27,6 +27,18 @@ function AdminPortal() {
     supplyCost: '',
     bookedDates:[],
   });
+  const [bookingData, setBookingData] = useState({
+    equipment: [],
+    startDate: '',
+    endDate: '',
+    totalPrice: '',
+  });
+  const [selectedBooking, setSelectedBooking] = useState({
+    equipment: [],
+    startDate: '',
+    endDate: '',
+    totalPrice: '',
+  })
   const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -95,7 +107,38 @@ function AdminPortal() {
 
     fetchEquipmentData();
     setSaveStatus('success');
-    
+
+    const fetchBookingData = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (!storedUser || !storedUser.jwt) {
+          console.error('User or token is missing in localStorage');
+          return;
+        }
+
+        const response = await fetch(process.env.REACT_APP_API_URL + "/booking/all", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.jwt}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch booking list');
+        }
+
+        const data = await response.json();
+        setBookingData(data);
+        console.log('Equipment', data);
+      } catch (error) {
+        console.error('Error fetching equipment list:', error);
+      }
+
+      
+    };
+      fetchBookingData();
 }, []);
 
 // handler to delete selected user
@@ -255,6 +298,8 @@ function AdminPortal() {
       console.error('Error deleting equipment:', error);
     }
   }
+
+  
   // console.log('Users', userData);
   // console.log('Equipment', selectedEquipment);
 
@@ -277,6 +322,13 @@ function AdminPortal() {
     const selectedEquipment = equipmentData.find(equipment => equipment._id === equipmentId);
     setSelectedEquipment(selectedEquipment);
     console.log('Selected Equipment:', selectedEquipment);
+  };
+
+  const handleBookingSelect = (bookingId) => {
+    // console.log('id', equipmentId)
+    const selectedBooking = bookingData.find(booking => booking._id === bookingId);
+    setSelectedBooking(selectedBooking);
+    console.log('Selected Booking:', selectedBooking);
   };
 
   return (
@@ -353,33 +405,67 @@ function AdminPortal() {
         <Card className='text mb-3 border-0'>
           <Card.Title className='display-6'>Bookings</Card.Title>
             <Card.Body>
-              <Card.Title className='mb-4'>booking.id</Card.Title>
+            <Dropdown className='mb-4'
+          onSelect={(bookingId) => handleBookingSelect(bookingId)}>
+            <Dropdown.Toggle variant="light" id="dropdown-basic">
+              Select a booking
+            </Dropdown.Toggle>
+            <Dropdown.Menu variant='dark'>
+              {bookingData && bookingData.length > 0 ? (
+                bookingData.map(booking => (
+                  <Dropdown.Item key={booking.id}
+                  eventKey={booking._id}
+                  >
+                  {`${booking._id}`}
+                  </Dropdown.Item>
+                      ))
+                  ) : (
+                  <Dropdown.Item disabled>No bookings available</Dropdown.Item>
+              )}
+            </Dropdown.Menu>
+            </Dropdown>
               <InputGroup className='flex-column' size='lg'>
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking start date'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedBooking ? setSelectedBooking.startDate : ''}
+            readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking end date'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedBooking ? setSelectedBooking.endDate : ''}
+            readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='equipment'
             type='input'
-            // onChange={event => setSearchInput(event.target.value)}
+            value={selectedBooking ? setSelectedBooking.equipment : ''}
+            readOnly={!isEditMode}
+            />
+            <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
+            placeholder='total price'
+            type='input'
+            value={selectedBooking ? setSelectedBooking.totalPrice : ''}
+            readOnly={!isEditMode}
             />
             </InputGroup>
               <Dropdown className='mb-4'>
             <Dropdown.Toggle variant="light" id="dropdown-basic">
               Add Equipment
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-            {/* Add your dropdown menu items here */}
-            <Dropdown.Item href="#">Equipment 1</Dropdown.Item>
-            <Dropdown.Item href="#">Equipment 2</Dropdown.Item>
-            {/* ... */}
+              <Dropdown.Menu variant='dark'>
+                {equipmentData && equipmentData.length > 0 ? (
+                  equipmentData.map(equipment => (
+                    <Dropdown.Item key={equipment.id}
+                    eventKey={equipment._id}
+                    >
+                    {`${equipment.itemName}`}
+                    </Dropdown.Item>
+                        ))
+                    ) : (
+                    <Dropdown.Item disabled>No equipment available</Dropdown.Item>
+                )}
             </Dropdown.Menu>
             </Dropdown>
             
