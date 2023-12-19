@@ -5,8 +5,30 @@ import '../Styles/adminportal.css';
 function AdminPortal() {
   const [userData, setUserData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [equipmentData, setEquipmentData] = useState([]);
-  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [equipmentData, setEquipmentData] = useState({
+    itemName: '',
+    description: '',
+    images: '',
+    pricePerDay: '',
+    pricePerWeek: '',
+    pricePerMonth: '',
+    stock: '',
+    supplyCost: '',
+    bookedDates:'',
+  });
+  const [selectedEquipment, setSelectedEquipment] = useState({
+    itemName: '',
+    description: '',
+    images: '',
+    pricePerDay: '',
+    pricePerWeek: '',
+    pricePerMonth: '',
+    stock: '',
+    supplyCost: '',
+    bookedDates:'',
+  });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,6 +94,7 @@ function AdminPortal() {
     };
 
     fetchEquipmentData();
+    setSaveStatus('success');
     
 }, []);
 
@@ -118,8 +141,53 @@ function AdminPortal() {
     }
   }
 
-  console.log('Users', userData);
+  // handler to update equipment
+  const updateEquipment = async () => {
+    
+    setEquipmentData(selectedEquipment)
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/equipment/update/" + selectedEquipment._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        body: JSON.stringify({ equipmentData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update equipment details');
+      }
+
+      const data = await response.json();
+      console.log('response', data);
+      
+      
+
+      // Toggle back to read-only mode after saving changes
+      setIsEditMode(false);
+      setSaveStatus('success');
+    } catch (error) {
+      console.error('Error updating equipment:', error);
+    }
+  };
+
+  // console.log('Users', userData);
   console.log('Equipment', equipmentData);
+
+  // Handler to toggle edit mode for all fields
+  const toggleEditMode = () => {
+    setIsEditMode((prevEditMode) => !prevEditMode);
+    setSaveStatus(null);
+    console.log('editmode', !isEditMode)
+  };
 
   const handleUserSelect = (userId) => {
     console.log('id', userId)
@@ -129,7 +197,7 @@ function AdminPortal() {
   };
   
   const handleEquipmentSelect = (equipmentId) => {
-    console.log('id', equipmentId)
+    // console.log('id', equipmentId)
     const selectedEquipment = equipmentData.find(equipment => equipment._id === equipmentId);
     setSelectedEquipment(selectedEquipment);
     console.log('Selected Equipment:', selectedEquipment);
@@ -280,53 +348,72 @@ function AdminPortal() {
         <InputGroup className='flex-column' size='lg'>
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='item name'
+            type='input'
             value={selectedEquipment ? selectedEquipment.itemName : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, itemName: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='description'
+            type='input'
             value={selectedEquipment ? selectedEquipment.description : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, description: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='images'
+            type='input'
             value={selectedEquipment ? selectedEquipment.images : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, images: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per day'
+            type='input'
             value={selectedEquipment ? selectedEquipment.pricePerDay : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, pricePerDay: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per week'
+            type='input'
             value={selectedEquipment ? selectedEquipment.pricePerWeek : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, pricePerWeek: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='price per month'
+            type='input'
             value={selectedEquipment ? selectedEquipment.pricePerMonth : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, pricePerMonth: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='stock'
+            type='input'
             value={selectedEquipment ? selectedEquipment.stock : ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, stock: e.target.value })}
           />
           <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='supply cost'
+            type='input'
             value={selectedEquipment ? selectedEquipment.supplyCost: ''}
-            readOnly
+            readOnly={!isEditMode}
+            onChange={(e) => setSelectedEquipment({ ...selectedEquipment, supplyCost: e.target.value })}
           />
           </InputGroup>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
+        <Button
+            className='mb-3 border-0'
+            style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={isEditMode ? updateEquipment : toggleEditMode}
+            >
+            {saveStatus === 'success' ? 'Edit' : 'Save'}
+            </Button>
         </div>
         <div className='d-flex justify-content-center'>
           <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Add New</Button>
-        </div>
-        <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
         </div>
         <div className='d-flex justify-content-center'>
           <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>

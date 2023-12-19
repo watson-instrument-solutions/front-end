@@ -102,7 +102,7 @@ function Dashboard() {
     setSaveStatus(null);
   };
 
-  // Handler to save changes
+  // Handler to update a user
   const saveChanges = async () => {
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
