@@ -144,7 +144,7 @@ function AdminPortal() {
   // handler to update equipment
   const updateEquipment = async () => {
     
-    console.log('to send', selectedEquipment)
+    console.log('to update', selectedEquipment)
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -182,7 +182,7 @@ function AdminPortal() {
 
   // handler to add new equipment
   const addEquipment = async () => {
-    console.log('to send', selectedEquipment)
+    console.log('to add', selectedEquipment)
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -219,6 +219,42 @@ function AdminPortal() {
     }
   }
 
+  // handler to delete equipment
+  const deleteEquipment = async () => {
+    console.log('to delete', selectedEquipment)
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/equipment/delete/" + selectedEquipment._id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add delete');
+      }
+
+      const data = await response.json();
+      console.log('response', data);
+      
+      
+
+      
+      
+      alert('Equipment deleted Successfully!')
+    } catch (error) {
+      console.error('Error deleting equipment:', error);
+    }
+  }
   // console.log('Users', userData);
   // console.log('Equipment', selectedEquipment);
 
@@ -467,7 +503,10 @@ function AdminPortal() {
           </Button>
         </div>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+          onClick={deleteEquipment}
+          >
+          Delete</Button>
         </div>
       </Card>
     </Container>
