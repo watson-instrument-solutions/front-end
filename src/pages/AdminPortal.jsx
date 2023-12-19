@@ -146,7 +146,9 @@ function AdminPortal() {
   const deleteUser = async () => {
 
     // Prompt the user for confirmation
-    const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+    const isConfirmed = 
+    window.confirm
+    ('Are you sure you want to delete this user? This will also remove all bookings associated to this user');
 
     if (!isConfirmed) {
     // User canceled the deletion
@@ -264,6 +266,13 @@ function AdminPortal() {
 
   // handler to delete equipment
   const deleteEquipment = async () => {
+    // Prompt the user for confirmation
+    const isConfirmed = window.confirm('Are you sure you want to delete this equipment?');
+
+    if (!isConfirmed) {
+    // User canceled the deletion
+    return;
+  }
     console.log('to delete', selectedEquipment)
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -299,9 +308,88 @@ function AdminPortal() {
     }
   }
 
+  // handler to delete a booking
+  const deleteBooking = async () => {
+    // Prompt the user for confirmation
+    const isConfirmed = window.confirm('Are you sure you want to delete this booking?');
+
+    if (!isConfirmed) {
+    // User canceled the deletion
+    return;
+  }
+
+    console.log('booking to delete', selectedBooking);
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/booking/admin/delete/" + selectedBooking._id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add delete');
+      }
+
+      const data = await response.json();
+      console.log('response', data);
+      
+      
+
+      
+      
+      alert('Booking deleted Successfully!')
+    } catch (error) {
+      console.error('Error deleting equipment:', error);
+    }
+  }
+
+  // handler to update a booking
+  const updateBooking = async () => {
+    console.log('booking to update', selectedBooking);
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/booking/admin/update/" + selectedBooking._id, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        body: JSON.stringify(selectedBooking),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update booking details');
+      }
+
+      const data = await response.json();
+      console.log('response', data);
+      
+      
+      alert('Equipment updated Successfully!')
+    } catch (error) {
+      console.error('Error updating equipment:', error);
+    }
+  }
+
   
   // console.log('Users', userData);
-  // console.log('Equipment', selectedEquipment);
+  // console.log('Equipment', equipmentData);
 
   // Handler to toggle edit mode for all fields
   const toggleEditMode = () => {
@@ -329,6 +417,21 @@ function AdminPortal() {
     const selectedBooking = bookingData.find(booking => booking._id === bookingId);
     setSelectedBooking(selectedBooking);
     console.log('Selected Booking:', selectedBooking);
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+    return formattedDate;
+  };
+
+  const equipmentNameDisplay = (equipmentData, equipmentIds) => {
+    const equipmentNames = equipmentIds.map((equipmentId) => {
+      const equipment = equipmentData.find((item) => item._id === equipmentId);
+      return equipment ? equipment.itemName : 'Equipment not found';
+    });
+  
+    return equipmentNames.join(', '); // Join multiple equipment names with a comma
   };
 
   return (
@@ -416,7 +519,7 @@ function AdminPortal() {
                   <Dropdown.Item key={booking.id}
                   eventKey={booking._id}
                   >
-                  {`${booking._id}`}
+                  {`${booking._id} - ${formatDate(booking.date)}`}
                   </Dropdown.Item>
                       ))
                   ) : (
@@ -428,19 +531,19 @@ function AdminPortal() {
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking start date'
             type='input'
-            value={selectedBooking ? selectedBooking.startDate : ''}
+            value={selectedBooking ? formatDate(selectedBooking.startDate) : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking end date'
             type='input'
-            value={selectedBooking ? selectedBooking.endDate : ''}
+            value={selectedBooking ? formatDate(selectedBooking.endDate) : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='equipment'
             type='input'
-            value={selectedBooking ? selectedBooking.equipment : ''}
+            value={selectedBooking ? equipmentNameDisplay(equipmentData, selectedBooking.equipment) : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
@@ -471,13 +574,21 @@ function AdminPortal() {
             
             </Card.Body>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Edit</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={setIsEditMode}
+            >
+            Edit</Button>
             </div>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Save</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={updateBooking}
+            >Save</Button>
             </div>
             <div className='d-flex justify-content-center'>
-            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
+            <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+            onClick={deleteBooking}
+            >
+            Delete</Button>
             </div>
         </Card>
       </Col>
