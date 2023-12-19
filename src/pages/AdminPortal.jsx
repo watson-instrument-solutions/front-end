@@ -144,7 +144,7 @@ function AdminPortal() {
   // handler to update equipment
   const updateEquipment = async () => {
     
-    setEquipmentData(selectedEquipment)
+    console.log('to send', selectedEquipment)
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -159,7 +159,7 @@ function AdminPortal() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${storedUser.jwt}`,
         },
-        body: JSON.stringify({ equipmentData }),
+        body: JSON.stringify(selectedEquipment),
       });
 
       if (!response.ok) {
@@ -180,7 +180,7 @@ function AdminPortal() {
   };
 
   // console.log('Users', userData);
-  console.log('Equipment', equipmentData);
+  console.log('Equipment', selectedEquipment);
 
   // Handler to toggle edit mode for all fields
   const toggleEditMode = () => {
