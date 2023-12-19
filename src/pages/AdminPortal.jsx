@@ -325,7 +325,7 @@ function AdminPortal() {
   };
 
   const handleBookingSelect = (bookingId) => {
-    // console.log('id', equipmentId)
+    
     const selectedBooking = bookingData.find(booking => booking._id === bookingId);
     setSelectedBooking(selectedBooking);
     console.log('Selected Booking:', selectedBooking);
@@ -428,25 +428,25 @@ function AdminPortal() {
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking start date'
             type='input'
-            value={selectedBooking ? setSelectedBooking.startDate : ''}
+            value={selectedBooking ? selectedBooking.startDate : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking end date'
             type='input'
-            value={selectedBooking ? setSelectedBooking.endDate : ''}
+            value={selectedBooking ? selectedBooking.endDate : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='equipment'
             type='input'
-            value={selectedBooking ? setSelectedBooking.equipment : ''}
+            value={selectedBooking ? selectedBooking.equipment : ''}
             readOnly={!isEditMode}
             />
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='total price'
             type='input'
-            value={selectedBooking ? setSelectedBooking.totalPrice : ''}
+            value={selectedBooking ? selectedBooking.totalPrice : ''}
             readOnly={!isEditMode}
             />
             </InputGroup>
