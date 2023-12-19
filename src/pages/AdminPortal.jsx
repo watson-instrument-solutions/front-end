@@ -14,7 +14,7 @@ function AdminPortal() {
     pricePerMonth: '',
     stock: '',
     supplyCost: '',
-    bookedDates:'',
+    bookedDates:[],
   });
   const [selectedEquipment, setSelectedEquipment] = useState({
     itemName: '',
@@ -25,7 +25,7 @@ function AdminPortal() {
     pricePerMonth: '',
     stock: '',
     supplyCost: '',
-    bookedDates:'',
+    bookedDates:[],
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
@@ -174,20 +174,60 @@ function AdminPortal() {
       // Toggle back to read-only mode after saving changes
       setIsEditMode(false);
       setSaveStatus('success');
+      alert('Equipment updated Successfully!')
     } catch (error) {
       console.error('Error updating equipment:', error);
     }
   };
 
+  // handler to add new equipment
+  const addEquipment = async () => {
+    console.log('to send', selectedEquipment)
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (!storedUser || !storedUser.jwt) {
+        console.error('User or token is missing in localStorage');
+        return;
+      }
+
+      const response = await fetch(process.env.REACT_APP_API_URL + "/equipment/add-new/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.jwt}`,
+        },
+        body: JSON.stringify(selectedEquipment),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add equipment details');
+      }
+
+      const data = await response.json();
+      console.log('response', data);
+      
+      
+
+      // Toggle back to read-only mode after saving changes
+      setIsEditMode(false);
+      setSaveStatus('success');
+      
+      alert('Equipment added Successfully!')
+    } catch (error) {
+      console.error('Error adding equipment:', error);
+    }
+  }
+
   // console.log('Users', userData);
-  console.log('Equipment', selectedEquipment);
+  // console.log('Equipment', selectedEquipment);
 
   // Handler to toggle edit mode for all fields
   const toggleEditMode = () => {
     setIsEditMode((prevEditMode) => !prevEditMode);
     setSaveStatus(null);
-    console.log('editmode', !isEditMode)
   };
+  
 
   const handleUserSelect = (userId) => {
     console.log('id', userId)
@@ -406,14 +446,25 @@ function AdminPortal() {
         <div className='d-flex justify-content-center'>
         <Button
             className='mb-3 border-0'
-            style={{ width: '30%', backgroundColor: '#a6bcd6', color: 'white' }}
+            style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
             onClick={isEditMode ? updateEquipment : toggleEditMode}
             >
             {saveStatus === 'success' ? 'Edit' : 'Save'}
             </Button>
         </div>
         <div className='d-flex justify-content-center'>
-          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Add New</Button>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+          onClick={setIsEditMode}
+          >
+          Add New
+          </Button>
+        </div>
+        <div className='d-flex justify-content-center'>
+          <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
+          onClick={addEquipment}
+          >
+          Save New
+          </Button>
         </div>
         <div className='d-flex justify-content-center'>
           <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}>Delete</Button>
