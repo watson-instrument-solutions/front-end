@@ -195,14 +195,14 @@ function Equipment() {
                       
                   </Card.Body>
                   <div className='d-flex align-items-end flex-column'>
-                  {user && (<Button className='check_avail border-0' 
+                  {user && availabilityCheckedTriggered && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#3db983', color: 'white' }}
                   disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
                   onClick={() => handleAddToCart(equipment)}
                   >
                   Add to Cart</Button>
                   )}
-                  {user && (<Button className='check_avail border-0' 
+                  {user && availabilityCheckedTriggered && (<Button className='check_avail border-0' 
                   style={{margin: '10px', marginTop: '0px', width: '40%', backgroundColor: '#d62150', color: 'white' }}
                   disabled={availabilityCheckedTriggered && availabilityChecked && !availableEquipment.includes(equipment)}
                   onClick={() => handleRemoveFromCart(equipment)}
