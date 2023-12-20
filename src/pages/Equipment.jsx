@@ -239,6 +239,7 @@ function Equipment() {
           >
           Check Availability
           </Button>
+          <p className='checkout_text'>Login or Register to add items to your cart</p>
           <p className='checkout_text'>Checkout to view your booking details</p>
         </div>
       </Container>
