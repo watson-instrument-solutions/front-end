@@ -39,13 +39,19 @@ function AdminPortal() {
     startDate: '',
     endDate: '',
     totalPrice: '',
-  })
+  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [editBookingClicked, setEditBookingClicked] = useState(false)
   const [newStartDate, setNewStartDate] = useState('');
   const [newEndDate, setNewEndDate] = useState('');
   const [recalculatedPrice, setRecalculatedPrice] = useState();
+  // const [updatedBooking, setUpdatedBooking] = ({
+  //   equipment: [],
+  //   startDate:'',
+  //   endDate: '',
+  //   totalPrice: '',
+  // });
   // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -360,7 +366,14 @@ function AdminPortal() {
 
   // handler to update a booking
   const updateBooking = async () => {
-    console.log('booking to update', selectedBooking);
+    const updatedBookingData = {
+      equipment: selectedBooking.equipment,
+      startDate: newStartDate,
+      endDate: newEndDate,
+      totalPrice: recalculatedPrice,
+    };
+
+    console.log('booking to update', updatedBookingData);
     try {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -375,7 +388,7 @@ function AdminPortal() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${storedUser.jwt}`,
         },
-        body: JSON.stringify(selectedBooking),
+        body: JSON.stringify(updatedBookingData),
       });
 
       if (!response.ok) {
@@ -386,7 +399,7 @@ function AdminPortal() {
       console.log('response', data);
       
       
-      alert('Equipment updated Successfully!')
+      alert('Booking updated Successfully!')
     } catch (error) {
       console.error('Error updating equipment:', error);
     }
