@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Container, Button, InputGroup, FormControl, Col, Dropdown } from 'react-bootstrap';
 import '../Styles/adminportal.css';
+import calculateTotalPrice from '../functions/calculatePrice';
 
 function AdminPortal() {
   const [userData, setUserData] = useState([]);
@@ -41,7 +42,11 @@ function AdminPortal() {
   })
   const [isEditMode, setIsEditMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [editBookingClicked, setEditBookingClicked] = useState(false)
+  const [newStartDate, setNewStartDate] = useState('');
+  const [newEndDate, setNewEndDate] = useState('');
+  const [recalculatedPrice, setRecalculatedPrice] = useState();
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     
@@ -434,6 +439,45 @@ function AdminPortal() {
     return equipmentNames.join(', '); // Join multiple equipment names with a comma
   };
 
+  // const handleNewBookingEquipment = (equipmentId) => {
+  //   // Toggle the equipmentId in the selectedEquipmentIds array
+  //   setSelectedEquipmentIds((prevIds) => {
+  //     const isAlreadySelected = prevIds.includes(equipmentId);
+  
+  //     if (isAlreadySelected) {
+  //       // Remove the item if it's already selected
+  //       return prevIds.filter((id) => id !== equipmentId);
+  //     } else {
+  //       // Add the item if it's not selected
+  //       console.log('selected new equipment', selectedEquipmentIds)
+  //       return [...prevIds, equipmentId];
+  //     }
+  //   });
+  // };
+
+  const handleRecalculatePrice = () => {
+    console.log('equipment data', selectedBooking);
+  
+    // Extract the array of equipment IDs from selectedBooking
+    const equipmentIds = selectedBooking.equipment.map(equipment => equipment);
+    console.log('equipmentIds', equipmentIds);
+  
+    // Match the equipment IDs with the corresponding equipment objects from equipmentData
+    const selectedEquipmentObjects = equipmentIds.map(id => equipmentData.find(equipment => equipment._id === id));
+    console.log('equipment object', selectedEquipmentObjects)
+    // Call the calculateTotalPrice function with the array of equipment objects
+  calculateTotalPrice(selectedEquipmentObjects, newStartDate, newEndDate)
+  .then(calculatedPrice => {
+    // Update the state with the calculated result
+    setRecalculatedPrice(calculatedPrice);
+    console.log('Recalc Price', calculatedPrice);
+  })
+  .catch(error => {
+    console.error('Error calculating total price:', error.message);
+    // Handle the error appropriately (e.g., show an error message to the user)
+  });
+  };
+
   return (
     <div className='admin_page'>
     <h1 className='admin_text'>Admin Portal</h1>
@@ -451,7 +495,8 @@ function AdminPortal() {
             <Dropdown.Menu variant='dark'>
               {userData && userData.length > 0 ? (
                 userData.map(user => (
-                  <Dropdown.Item key={user.id}
+                  <Dropdown.Item 
+                  key={user.id}
                   eventKey={user._id}
                   >
                   {`${user.firstName} ${user.lastName} - ${user.businessName}`}
@@ -532,50 +577,93 @@ function AdminPortal() {
             placeholder='booking start date'
             type='input'
             value={selectedBooking ? formatDate(selectedBooking.startDate) : ''}
-            readOnly={!isEditMode}
+            readOnly
             />
+            {editBookingClicked && <div className='new_booking_start'> New Start date: <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
+            placeholder='new start date'
+            type='date'
+            value={newStartDate}
+            onChange={(e) => setNewStartDate(e.target.value)}
+            readOnly={!isEditMode}
+            /></div>} 
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='booking end date'
             type='input'
             value={selectedBooking ? formatDate(selectedBooking.endDate) : ''}
-            readOnly={!isEditMode}
+            readOnly
             />
-            <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
+            {editBookingClicked && <div className='new_booking_end'>New End Date: <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
+            placeholder='new end date'
+            type='date'
+            value={newEndDate}
+            onChange={(e) => setNewEndDate(e.target.value)}
+            readOnly={!isEditMode}
+            /></div>}
+            <FormControl style={{ margin: 'auto', width: '80%', height: '100%', marginBottom: '40px' }} 
             placeholder='equipment'
             type='input'
             value={selectedBooking ? equipmentNameDisplay(equipmentData, selectedBooking.equipment) : ''}
-            readOnly={!isEditMode}
+            readOnly
             />
+            {/* {editBookingClicked && 
+              <div className='new_booking_equipment'>
+                New Equipment List:{' '}
+                <FormControl
+                  style={{ margin: 'auto', width: '80%', marginBottom: '0px' }}
+                  placeholder='equipment'
+                  type='input'
+                  value={selectedEquipmentIds.map((id) => {
+                    const selectedEquipment = equipmentData.find((equipment) => equipment._id === id);
+                    return selectedEquipment ? selectedEquipment.itemName : '';
+                  }).join(', ')}
+                  readOnly={!isEditMode}
+                />
+                <Dropdown className='mb-4' onSelect={(eventKey, event) => handleNewBookingEquipment(eventKey)}>
+                  <Dropdown.Toggle variant="transparent" id="dropdown-basic">
+                    Add Equipment?
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu variant='dark'>
+                    {equipmentData && equipmentData.length > 0 ? (
+                      equipmentData.map((equipment) => (
+                        <Dropdown.Item 
+                          key={equipment.id} 
+                          eventKey={equipment._id}
+                        >
+                          {`${equipment.itemName}`}
+                        </Dropdown.Item>
+                      ))
+                    ) : (
+                      <Dropdown.Item disabled>No equipment available</Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            } */}
             <FormControl style={{ margin: 'auto', width: '80%', marginBottom: '40px' }} 
             placeholder='total price'
             type='input'
-            value={selectedBooking ? selectedBooking.totalPrice : ''}
-            readOnly={!isEditMode}
+            value={selectedBooking ? `$${selectedBooking.totalPrice}` : ''}
+            readOnly
             />
+            {editBookingClicked && <div className='recalc_booking_price'>Updated Price:<FormControl style={{ margin: 'auto', width: '80%', marginBottom: '0px' }} 
+            placeholder='new price'
+            type='input'
+            value={recalculatedPrice !== null ? `$${recalculatedPrice}` : ''}
+            readOnly={!isEditMode}
+            /><Button variant='transparent'
+            style={{border: 'solid 1px'}}
+            onClick={handleRecalculatePrice}
+            >Recalculate</Button></div>}
             </InputGroup>
-              <Dropdown className='mb-4'>
-            <Dropdown.Toggle variant="light" id="dropdown-basic">
-              Add Equipment
-            </Dropdown.Toggle>
-              <Dropdown.Menu variant='dark'>
-                {equipmentData && equipmentData.length > 0 ? (
-                  equipmentData.map(equipment => (
-                    <Dropdown.Item key={equipment.id}
-                    eventKey={equipment._id}
-                    >
-                    {`${equipment.itemName}`}
-                    </Dropdown.Item>
-                        ))
-                    ) : (
-                    <Dropdown.Item disabled>No equipment available</Dropdown.Item>
-                )}
-            </Dropdown.Menu>
-            </Dropdown>
+              
             
             </Card.Body>
             <div className='d-flex justify-content-center'>
             <Button className='mb-3 border-0' style={{ width: '40%', backgroundColor: '#a6bcd6', color: 'white' }}
-            onClick={setIsEditMode}
+            onClick={() => {
+              setIsEditMode(true); 
+              setEditBookingClicked(true)
+            }}
             >
             Edit</Button>
             </div>

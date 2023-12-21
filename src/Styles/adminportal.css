@@ -5,3 +5,34 @@
     margin-bottom: 40px;
 }
 
+.new_booking_start {
+    background-color: rgb(248, 236, 231);
+    border-radius: 10px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 30px;
+}
+
+.new_booking_end {
+    background-color: rgb(248, 236, 231);
+    border-radius: 10px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 30px;
+}
+
+.new_booking_equipment {
+    background-color: rgb(248, 236, 231);
+    border-radius: 10px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 30px;
+}
+
+.recalc_booking_price {
+    background-color: rgb(248, 236, 231);
+    border-radius: 10px;
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 30px;
+}
