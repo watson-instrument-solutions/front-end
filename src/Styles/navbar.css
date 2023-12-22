@@ -1,8 +1,8 @@
 .wisGrey {
-    background-color: #d4e8ff;
+    background: linear-gradient(to right, #d4e8ff, #a3cfff);
     height: 68px;
     display: flex;
-    padding: 0px;
+    padding: 0;
 }
 
 

@@ -3,7 +3,7 @@
     bottom: 0;
     height: 55px;
     width: 100%;
-    background-color: #d4e8ff;
+    background: linear-gradient(to right, #d4e8ff, #a3cfff);
     display: flex;
     justify-content: space-between; 
     align-items: center;

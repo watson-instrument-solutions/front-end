@@ -32,12 +32,15 @@ function Header() {
           <Nav.Link to='/' as={NavLink}>
             Home
           </Nav.Link>
+
           <Nav.Link to='/equipment' as={NavLink}>
-            Hire Equipment
+            Hire
           </Nav.Link>
+
           <Nav.Link to='/contact-us' as={NavLink}>
             Contact
           </Nav.Link>
+
           {!user && (
             <div className='d-flex'>
               <Nav.Link to='/login' as={NavLink}>
@@ -48,34 +51,39 @@ function Header() {
               </Nav.Link>
             </div>
           )}
+        
           {user && (
             <Nav.Link to='/dashboard' as={NavLink}>
               Dashboard
             </Nav.Link>
           )}
+          {/* {user.admin && (
+            <Nav.Link to='/admin-portal' as={NavLink}>
+              Admin
+            </Nav.Link>
+          )} */}
         </Nav>
         <div className='ml-auto'>
           {user && (
             <div className='logout_div'>
               <Button
-              className='border-0 rounded-circle'
-              style={{ marginRight: '1.6em', width: '3em', height: '3em', backgroundColor: '#3db983', color: 'white' }}
-              onClick={() => navigate('/confirm')}
-              ><ShoppingCartCheckoutOutlined/>
-              <div className='rounded-circle d-flex justify-content-center
-              align-items-center'
-              style={{backgroundColor: '#d62150', color: 'white', width: '1.2em', height: '1.2em',
-              position: 'absolute', bottom: 0, right: 118}}
-              >
-              <span>{totalItems}</span>
-              </div>
-              
+                className='border-0 rounded-circle'
+                style={{ marginRight: '1.6em', width: '3em', height: '3em', backgroundColor: '#3db983', color: 'white' }}
+                onClick={() => navigate('/confirm')}
+                ><ShoppingCartCheckoutOutlined/>
+                <div className='rounded-circle d-flex justify-content-center
+                align-items-center'
+                style={{backgroundColor: '#d62150', color: 'white', width: '1.2em', height: '1.2em',
+                position: 'absolute', bottom: 0, right: 118}}
+                >
+                <span>{totalItems}</span>
+                </div>
               </Button>
               <Button
                 className='border-3'
                 style={{ backgroundColor: 'white', color: '#a6bcd6', borderColor: '#a6bcd6' }}
                 onClick={handleClick}
-              >
+                >
                 Log out
               </Button>
               

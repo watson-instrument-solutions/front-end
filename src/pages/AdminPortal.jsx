@@ -159,7 +159,7 @@ function AdminPortal() {
     // Prompt the user for confirmation
     const isConfirmed = 
     window.confirm
-    ('Are you sure you want to delete this user? This will also remove all bookings associated to this user');
+    ('Are you sure you want to delete this user? This will also remove all bookings associated with this user');
 
     if (!isConfirmed) {
     // User canceled the deletion
