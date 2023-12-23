@@ -31,9 +31,6 @@
 .booking_dates {
     display: flex;
     margin-top: 50%;
-    
-        
-      
 }
 
 .dates_container {
@@ -43,7 +40,5 @@
     left: 90%;
     right: 10%;
     transform: translate(-50%, -50%);
-    /* max-width: 50%; */
-    /* width: 100%;    */
 }
 
