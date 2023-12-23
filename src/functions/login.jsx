@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "./useUserContext";
 import { useNavigate } from 'react-router-dom';
-// import { useJwt } from "react-jwt";
 import { jwtDecode } from "jwt-decode";
 
-
+// hook to manage user login
 export const useLogin = () => {
+  // State to manage error, userJwt, and loading state
   const [error, setError] = useState(null);
   const [userJwt, setUserJwt] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  // Get dispatch function from UserContext
   const { dispatch } = useUserContext();
+  // Get navigate function from react-router-dom
   const navigate = useNavigate();
 
+  // Function to fetch user object from the server
   const getUserDetails = async (userId) => {
     const response = await fetch(process.env.REACT_APP_API_URL + "/users/me", {
       method: "GET",
@@ -29,6 +32,7 @@ export const useLogin = () => {
     return userData;
   };
 
+  // useEffect to handle user login logic
   useEffect(() => {
     // This will run after the component is mounted or when userJwt changes
     const fetchData = async () => {
@@ -41,6 +45,8 @@ export const useLogin = () => {
           const userDetails = await getUserDetails(decodedToken.userId);
           console.log('user?', userDetails);
 
+          // if user is an admin, navigate to the admin portal,
+          // if non admin user navigate to dashboard
           if (userDetails.admin) {
             console.log('admin login, navigating to admin portal');
             navigate('/admin-portal');
@@ -56,10 +62,12 @@ export const useLogin = () => {
         setIsLoading(false);
       }
     };
-
-    fetchData(); // Invoke the function immediately after setting userJwt
+    
+    fetchData(); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userJwt, navigate]);
 
+  // Function to handle user login
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
@@ -87,7 +95,7 @@ export const useLogin = () => {
 
         // set jwt to state
         setUserJwt(data.jwt);
-        console.log('jwt', userJwt); // Note: This might not show the updated value immediately due to asynchronous nature
+        // console.log('jwt', userJwt); 
 
         // update the user context
         dispatch({ type: 'LOGIN', payload: data });
@@ -98,6 +106,6 @@ export const useLogin = () => {
       setError("An unexpected error occurred during login");
     }
   };
-
+  // Return the login function, loading state, and error state
   return { login, isLoading, error };
 };

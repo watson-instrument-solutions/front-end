@@ -4,6 +4,7 @@ import anechoicImg from '../docs/anechoic_unsplash.jpg';
 import { Container, Card, Row } from 'react-bootstrap';
 
 function Home() {
+  // JSX rendering
   return (
     <Container class='position-relative' className='all_cards'>
       <Row className='mx-2 row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2'>

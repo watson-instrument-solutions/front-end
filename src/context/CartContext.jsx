@@ -3,20 +3,18 @@ import { createContext, useReducer } from 'react';
 // Create the context
 const CartContext = createContext();
 
-
 // Initial state for the cart
 const initialCartState = {
   cartItems: [],
 };
 
-
 // Define a reducer function to handle state changes
 const cartReducer = (state, action) => {
   switch (action.type) {
+// add to cart
     case 'ADD_TO_CART':
   const existingItem = state.cartItems.find(item => item.id === action.payload.id);
   const newItem = { ...action.payload, quantity: 1 };
-
   // Check if the item is already in the cart
   if (existingItem) {
     // Check if adding one more would exceed the available stock
@@ -53,11 +51,11 @@ const cartReducer = (state, action) => {
 
       return newState;
     } else {
-      // If adding the new item would exceed the available stock, do nothing or handle as needed
+      // If adding the new item would exceed the available stock, do nothing
       return state;
     }
   }
-
+  // remove from cart
   case 'REMOVE_FROM_CART':
     const newState = {
       ...state,
@@ -67,7 +65,8 @@ const cartReducer = (state, action) => {
             ? { ...item, quantity: Math.max(0, item.quantity - 1) }
             : item
         )
-        .filter(item => item.quantity > 0), // Remove items with quantity 0
+        // Remove items with quantity 0
+        .filter(item => item.quantity > 0), 
     };
 
     // Save the updated state to local storage
@@ -75,7 +74,7 @@ const cartReducer = (state, action) => {
     return newState;
 
     case 'CLEAR_CART':
-      // clear local storge
+      // clear local storage
       localStorage.removeItem('cart');
         return {
           ...state,
@@ -84,10 +83,10 @@ const cartReducer = (state, action) => {
 
     default:
       return state;
-  }
+}
 };
 
-// Create a provider component that wraps your app
+// Create a provider component that wraps app
 export const CartProvider = ({ children }) => {
   const [cartState, dispatch] = useReducer(cartReducer, initialCartState);
 
@@ -104,13 +103,10 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_CART' })
   };
 
-  // In your CartProvider component or wherever you initialize your state
-const loadCartFromLocalStorage = () => {
+  const loadCartFromLocalStorage = () => {
   const storedCart = localStorage.getItem('cart');
   return storedCart ? JSON.parse(storedCart) : initialCartState;
 };
-
-
 
   return (
     <CartContext.Provider

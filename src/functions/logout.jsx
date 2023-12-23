@@ -1,13 +1,13 @@
 import { useUserContext } from "./useUserContext";
 import { useNavigate } from 'react-router-dom';
 
-
+// function to handle user log out
 export const useLogout = () => {
     const { dispatch } = useUserContext();
     const navigate = useNavigate();
 
     const logout = () => {
-        // remove user from storage
+        // remove user and cart contents from storage
         localStorage.removeItem('user')
         localStorage.removeItem('cart')
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
+// function to handle user registration
 export const useRegister = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
@@ -10,8 +10,9 @@ export const useRegister = () => {
     const register = async (email, password) => {
       setIsLoading(true);
       setError(null);
-      console.log(email, password);
-  
+      // console.log(email, password);
+
+      // fetch request
       try {
         let result = await fetch(
           process.env.REACT_APP_API_URL + "/users/register-account",

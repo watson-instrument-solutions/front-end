@@ -1,4 +1,3 @@
-import React from 'react'
 import '../Styles/header.css'
 import wislogoNarrow from '../docs/wis-narrow.jpg'
 

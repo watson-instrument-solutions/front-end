@@ -1,5 +1,6 @@
-
-
+// function to calculate price of a booking using different rates or daily, weekly, and monthly hire.
+// if booking period is over 1 week but less than a month, weekly rate is applied to any left over days, 
+// if booking is over a month, monthly rate is applied to any left over days.
 async function calculateTotalPrice(equipmentArray, startDate, endDate) {
     try {
       console.log("calculateTotalPrice - Start");
@@ -12,7 +13,7 @@ async function calculateTotalPrice(equipmentArray, startDate, endDate) {
         throw new Error("Invalid startDate or endDate");
       }
   
-      // Calculate the total number of days
+      // Calculate the total number of days from ms
       const days = Math.floor(Math.abs((end - start) / (24 * 60 * 60 * 1000)));
   
       console.log("Days:", days);
@@ -23,12 +24,14 @@ async function calculateTotalPrice(equipmentArray, startDate, endDate) {
           console.error("Invalid equipment object:", equipment);
           return 0;
         }
-  
+        
+        // add supply cost, which is only applicable to one made to order item
         let totalPrice = 0 + equipment.supplyCost;
-  
+        
+
         console.log(`Calculating price for equipment ${equipment._id}:`);
-        console.log(`Base Price: ${equipment.supplyCost}`);
-  
+        
+        // determine rate and calculate item price 
         if (days < 7) {
           totalPrice = days * equipment.pricePerDay;
           console.log(`Price for ${days} days: ${totalPrice}`);
