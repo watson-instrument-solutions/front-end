@@ -17,8 +17,8 @@ function Home() {
           certification, software, and associated accessories to ensure you can 
           complete your job with confidence to meet industry specification.</p>
         </Card>
-        <Card className='image mb-3 border-0'>
-          <img src={anechoicImg} alt='home_img' className='home_img'/>
+        <Card className='image border-0 text-center gradient-overlay'>
+        <img src={anechoicImg} alt='home_img' className='home_img img-fluid opaque-image'/>
         </Card>
       </Row>
     </Container>

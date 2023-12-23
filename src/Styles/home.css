@@ -12,4 +12,9 @@
 .image {
     width: auto;
     object-fit: contain;
+    padding: 0px;
+}
+
+.opaque-image {
+    opacity: 0.6; 
 }
